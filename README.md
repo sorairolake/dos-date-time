@@ -12,9 +12,9 @@ SPDX-License-Identifier: CC-BY-4.0
 [![Docs][docs-badge]][docs-url]
 ![License][license-badge]
 
-**dos-date-time** is a [MS-DOS date and time] library for [Rust].
+**dos-date-time** is an [MS-DOS date and time] library for [Rust].
 
-A MS-DOS date and time are packed 16-bit unsigned integer values that specify
+An MS-DOS date and time are packed 16-bit unsigned integer values that specify
 the date and time an MS-DOS file was last written to, and are used as
 timestamps such as [FAT] or [ZIP] file format.
 
