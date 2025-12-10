@@ -18,6 +18,10 @@ include = ["/LICENSES", "/README.md", "/src"]
 [package.metadata.docs.rs]
 all-features = true
 
+[[example]]
+name = "format"
+required-features = ["std"]
+
 [dependencies]
 chrono = { version = "0.4.42", default-features = false, optional = true }
 jiff = { version = "0.2.16", default-features = false, optional = true }
@@ -26,10 +30,7 @@ time = { version = "0.3.44", default-features = false }
 [dev-dependencies]
 anyhow = "1.0.100"
 clap = { version = "4.5.53", features = ["derive"] }
-proptest = "1.9.0"
-proptest-derive = "0.7.0"
-test-strategy = "0.4.3"
-time = { version = "0.3.44", features = ["macros"] }
+time = { version = "0.3.44", features = ["formatting", "macros"] }
 
 [features]
 default = ["std"]
@@ -46,4 +47,3 @@ pedantic = { level = "warn", priority = -1 }
 [lints.rust]
 missing_debug_implementations = "deny"
 rust_2018_idioms = { level = "warn", priority = -1 }
-unsafe_code = "forbid"
