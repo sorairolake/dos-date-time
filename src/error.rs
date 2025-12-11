@@ -6,7 +6,7 @@
 
 use core::{error::Error, fmt};
 
-/// The error type indicating that [MS-DOS date and time] was out of range.
+/// The error type indicating that [MS-DOS date and time] were out of range.
 ///
 /// [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -67,12 +67,12 @@ impl From<DateTimeRangeErrorKind> for DateTimeRangeError {
 pub enum DateTimeRangeErrorKind {
     /// Value was negative.
     ///
-    /// This means the date and time was before "1980-01-01 00:00:00".
+    /// This means MS-DOS date and time were before "1980-01-01 00:00:00".
     Negative,
 
     /// Value was too big to be represented as [MS-DOS date and time].
     ///
-    /// This means the date and time was after "2107-12-31 23:59:58".
+    /// This means MS-DOS date and time were after "2107-12-31 23:59:58".
     ///
     /// [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
     Overflow,
@@ -82,8 +82,8 @@ impl fmt::Display for DateTimeRangeErrorKind {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Negative => write!(f, "date and time is before `1980-01-01 00:00:00`"),
-            Self::Overflow => write!(f, "date and time is after `2107-12-31 23:59:58`"),
+            Self::Negative => write!(f, "MS-DOS date and time are before `1980-01-01 00:00:00`"),
+            Self::Overflow => write!(f, "MS-DOS date and time are after `2107-12-31 23:59:58`"),
         }
     }
 }
@@ -182,14 +182,14 @@ mod tests {
                 "{}",
                 DateTimeRangeError::new(DateTimeRangeErrorKind::Negative)
             ),
-            "date and time is before `1980-01-01 00:00:00`"
+            "MS-DOS date and time are before `1980-01-01 00:00:00`"
         );
         assert_eq!(
             format!(
                 "{}",
                 DateTimeRangeError::new(DateTimeRangeErrorKind::Overflow)
             ),
-            "date and time is after `2107-12-31 23:59:58`"
+            "MS-DOS date and time are after `2107-12-31 23:59:58`"
         );
     }
 
@@ -282,11 +282,11 @@ mod tests {
     fn display_dos_date_time_range_error_kind() {
         assert_eq!(
             format!("{}", DateTimeRangeErrorKind::Negative),
-            "date and time is before `1980-01-01 00:00:00`"
+            "MS-DOS date and time are before `1980-01-01 00:00:00`"
         );
         assert_eq!(
             format!("{}", DateTimeRangeErrorKind::Overflow),
-            "date and time is after `2107-12-31 23:59:58`"
+            "MS-DOS date and time are after `2107-12-31 23:59:58`"
         );
     }
 }
