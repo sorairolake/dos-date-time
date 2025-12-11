@@ -7,7 +7,7 @@
 use super::DateTime;
 
 impl DateTime {
-    /// The smallest value that can be represented by the file time.
+    /// The smallest value that can be represented by MS-DOS date and time.
     ///
     /// This is "1980-01-01 00:00:00".
     ///
@@ -28,7 +28,7 @@ impl DateTime {
     // and time.
     pub const MIN: Self = unsafe { Self::new_unchecked(0b0000_0000_0010_0001, u16::MIN) };
 
-    /// The largest value that can be represented by the file time.
+    /// The largest value that can be represented by MS-DOS date and time.
     ///
     /// This is "2107-12-31 23:59:58".
     ///
