@@ -6,9 +6,11 @@
 
 extern crate test;
 
-use dos_date_time::DateTime;
+use dos_date_time::{
+    DateTime,
+    time::{Time, macros::date},
+};
 use test::Bencher;
-use time::{Time, macros::date};
 
 #[bench]
 fn new(b: &mut Bencher) {

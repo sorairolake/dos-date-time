@@ -8,11 +8,13 @@ extern crate test;
 
 #[cfg(feature = "chrono")]
 use chrono::NaiveDateTime;
-use dos_date_time::DateTime;
+use dos_date_time::{
+    DateTime,
+    time::{PrimitiveDateTime, macros::datetime},
+};
 #[cfg(feature = "jiff")]
 use jiff::civil;
 use test::Bencher;
-use time::{PrimitiveDateTime, macros::datetime};
 
 #[bench]
 fn try_from_date_time_to_primitive_date_time(b: &mut Bencher) {
