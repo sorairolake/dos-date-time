@@ -9,12 +9,6 @@
 //! MS-DOS file was last written to, and are used as timestamps such as [FAT] or
 //! [ZIP] file format.
 //!
-//! <div class="warning">
-//!
-//! The resolution of MS-DOS date and time is 2 seconds.
-//!
-//! </div>
-//!
 //! # Examples
 //!
 //! ## Basic usage

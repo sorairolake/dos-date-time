@@ -27,9 +27,14 @@ use crate::error::{DateTimeRangeError, DateTimeRangeErrorKind};
 ///
 /// </div>
 ///
+/// See the [format specification] for [Kaitai Struct] for more details on the
+/// structure of MS-DOS date and time.
+///
 /// [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
 /// [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
 /// [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
+/// [format specification]: https://formats.kaitai.io/dos_datetime/
+/// [Kaitai Struct]: https://kaitai.io/
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct DateTime {
     date: u16,
