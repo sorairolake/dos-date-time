@@ -30,7 +30,7 @@ use crate::error::{DateTimeRangeError, DateTimeRangeErrorKind};
 /// [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
 /// [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
 /// [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct DateTime {
     date: u16,
     time: u16,

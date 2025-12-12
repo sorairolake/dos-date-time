@@ -4,44 +4,13 @@
 
 //! Utilities for comparing and ordering values.
 
-use core::cmp::Ordering;
-
-use super::DateTime;
-
-impl Ord for DateTime {
-    fn cmp(&self, other: &Self) -> Ordering {
-        if let ordering @ (Ordering::Less | Ordering::Greater) = self.year().cmp(&other.year()) {
-            return ordering;
-        }
-        if let ordering @ (Ordering::Less | Ordering::Greater) = self.month().cmp(&other.month()) {
-            return ordering;
-        }
-        if let ordering @ (Ordering::Less | Ordering::Greater) = self.day().cmp(&other.day()) {
-            return ordering;
-        }
-        if let ordering @ (Ordering::Less | Ordering::Greater) = self.hour().cmp(&other.hour()) {
-            return ordering;
-        }
-        if let ordering @ (Ordering::Less | Ordering::Greater) = self.minute().cmp(&other.minute())
-        {
-            return ordering;
-        }
-        self.second().cmp(&other.second())
-    }
-}
-
-impl PartialOrd for DateTime {
-    #[inline]
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
 #[cfg(test)]
 mod tests {
+    use core::cmp::Ordering;
+
     use time::macros::datetime;
 
-    use super::*;
+    use super::super::DateTime;
 
     #[test]
     fn equality() {
