@@ -2,13 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Error types for this crate.
+//! Error types for [`DateTime`](crate::DateTime).
 
 use core::{error::Error, fmt};
 
-/// The error type indicating that [MS-DOS date and time] were out of range.
-///
-/// [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
+/// The error type indicating that a [`DateTime`](crate::DateTime) was out of
+/// range.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[allow(clippy::module_name_repetitions)]
 pub struct DateTimeRangeError(DateTimeRangeErrorKind);
@@ -70,11 +69,9 @@ pub enum DateTimeRangeErrorKind {
     /// This means MS-DOS date and time were before "1980-01-01 00:00:00".
     Negative,
 
-    /// Value was too big to be represented as [MS-DOS date and time].
+    /// Value was too big to be represented as [`DateTime`](crate::DateTime).
     ///
     /// This means MS-DOS date and time were after "2107-12-31 23:59:58".
-    ///
-    /// [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
     Overflow,
 }
 
