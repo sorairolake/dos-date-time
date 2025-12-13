@@ -42,7 +42,7 @@
 //!
 //! // The largest MS-DOS date and time.
 //! assert_eq!(
-//!     DateTime::from_date_time(date!(2107 - 12 - 31), time!(23:59:58)),
+//!     DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)),
 //!     Ok(DateTime::MAX)
 //! );
 //! ```

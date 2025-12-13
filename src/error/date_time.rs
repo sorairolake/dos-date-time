@@ -32,10 +32,10 @@ impl DateTimeRangeError {
     /// #     },
     /// # };
     /// #
-    /// let err = DateTime::from_date_time(date!(1979 - 12 - 31), time!(23:59:59)).unwrap_err();
+    /// let err = DateTime::from_date_time(date!(1979-12-31), time!(23:59:59)).unwrap_err();
     /// assert_eq!(err.kind(), DateTimeRangeErrorKind::Negative);
     ///
-    /// let err = DateTime::from_date_time(date!(2108 - 01 - 01), Time::MIDNIGHT).unwrap_err();
+    /// let err = DateTime::from_date_time(date!(2108-01-01), Time::MIDNIGHT).unwrap_err();
     /// assert_eq!(err.kind(), DateTimeRangeErrorKind::Overflow);
     /// ```
     #[must_use]

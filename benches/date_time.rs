@@ -24,7 +24,7 @@ fn new_unchecked(b: &mut Bencher) {
 
 #[bench]
 fn from_date_time(b: &mut Bencher) {
-    b.iter(|| DateTime::from_date_time(date!(1980 - 01 - 01), Time::MIDNIGHT).unwrap());
+    b.iter(|| DateTime::from_date_time(date!(1980-01-01), Time::MIDNIGHT).unwrap());
 }
 
 #[bench]

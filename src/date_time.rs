@@ -154,18 +154,18 @@ impl DateTime {
     /// # };
     /// #
     /// assert_eq!(
-    ///     DateTime::from_date_time(date!(1980 - 01 - 01), Time::MIDNIGHT),
+    ///     DateTime::from_date_time(date!(1980-01-01), Time::MIDNIGHT),
     ///     Ok(DateTime::MIN)
     /// );
     /// assert_eq!(
-    ///     DateTime::from_date_time(date!(2107 - 12 - 31), time!(23:59:58)),
+    ///     DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)),
     ///     Ok(DateTime::MAX)
     /// );
     ///
     /// // Before `1980-01-01 00:00:00`.
-    /// assert!(DateTime::from_date_time(date!(1979 - 12 - 31), time!(23:59:59)).is_err());
+    /// assert!(DateTime::from_date_time(date!(1979-12-31), time!(23:59:59)).is_err());
     /// // After `2107-12-31 23:59:59`.
-    /// assert!(DateTime::from_date_time(date!(2108 - 01 - 01), Time::MIDNIGHT).is_err());
+    /// assert!(DateTime::from_date_time(date!(2108-01-01), Time::MIDNIGHT).is_err());
     /// ```
     pub fn from_date_time(date: Date, time: Time) -> Result<Self, DateTimeRangeError> {
         match date.year() {
@@ -451,11 +451,11 @@ mod tests {
     #[test]
     fn from_date_time_before_dos_date_time_epoch() {
         assert_eq!(
-            DateTime::from_date_time(date!(1979 - 12 - 31), time!(23:59:58)).unwrap_err(),
+            DateTime::from_date_time(date!(1979-12-31), time!(23:59:58)).unwrap_err(),
             DateTimeRangeErrorKind::Negative.into()
         );
         assert_eq!(
-            DateTime::from_date_time(date!(1979 - 12 - 31), time!(23:59:59)).unwrap_err(),
+            DateTime::from_date_time(date!(1979-12-31), time!(23:59:59)).unwrap_err(),
             DateTimeRangeErrorKind::Negative.into()
         );
     }
@@ -463,29 +463,29 @@ mod tests {
     #[test]
     fn from_date_time() {
         assert_eq!(
-            DateTime::from_date_time(date!(1980 - 01 - 01), Time::MIDNIGHT).unwrap(),
+            DateTime::from_date_time(date!(1980-01-01), Time::MIDNIGHT).unwrap(),
             DateTime::MIN
         );
         assert_eq!(
-            DateTime::from_date_time(date!(1980 - 01 - 01), time!(00:00:01)).unwrap(),
+            DateTime::from_date_time(date!(1980-01-01), time!(00:00:01)).unwrap(),
             DateTime::MIN
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
-            DateTime::from_date_time(date!(2002 - 11 - 26), time!(19:25:00)).unwrap(),
+            DateTime::from_date_time(date!(2002-11-26), time!(19:25:00)).unwrap(),
             DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
-            DateTime::from_date_time(date!(2018 - 11 - 17), time!(10:38:30)).unwrap(),
+            DateTime::from_date_time(date!(2018-11-17), time!(10:38:30)).unwrap(),
             DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
         );
         assert_eq!(
-            DateTime::from_date_time(date!(2107 - 12 - 31), time!(23:59:58)).unwrap(),
+            DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)).unwrap(),
             DateTime::MAX
         );
         assert_eq!(
-            DateTime::from_date_time(date!(2107 - 12 - 31), time!(23:59:59)).unwrap(),
+            DateTime::from_date_time(date!(2107-12-31), time!(23:59:59)).unwrap(),
             DateTime::MAX
         );
     }
@@ -493,7 +493,7 @@ mod tests {
     #[test]
     fn from_date_time_with_too_big_date_time() {
         assert_eq!(
-            DateTime::from_date_time(date!(2108 - 01 - 01), Time::MIDNIGHT).unwrap_err(),
+            DateTime::from_date_time(date!(2108-01-01), Time::MIDNIGHT).unwrap_err(),
             DateTimeRangeErrorKind::Overflow.into()
         );
     }

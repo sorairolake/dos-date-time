@@ -21,7 +21,7 @@ impl DateTime {
     /// #
     /// assert_eq!(
     ///     DateTime::MIN,
-    ///     DateTime::from_date_time(date!(1980 - 01 - 01), Time::MIDNIGHT).unwrap()
+    ///     DateTime::from_date_time(date!(1980-01-01), Time::MIDNIGHT).unwrap()
     /// );
     /// ```
     // SAFETY: the given MS-DOS date and time are valid as the smallest MS-DOS date
@@ -42,7 +42,7 @@ impl DateTime {
     /// #
     /// assert_eq!(
     ///     DateTime::MAX,
-    ///     DateTime::from_date_time(date!(2107 - 12 - 31), time!(23:59:58)).unwrap()
+    ///     DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)).unwrap()
     /// );
     /// ```
     // SAFETY: the given MS-DOS date and time are valid as the largest MS-DOS date
@@ -64,7 +64,7 @@ mod tests {
     fn min() {
         assert_eq!(
             DateTime::MIN,
-            DateTime::from_date_time(date!(1980 - 01 - 01), Time::MIDNIGHT).unwrap()
+            DateTime::from_date_time(date!(1980-01-01), Time::MIDNIGHT).unwrap()
         );
     }
 
@@ -72,7 +72,7 @@ mod tests {
     fn max() {
         assert_eq!(
             DateTime::MAX,
-            DateTime::from_date_time(date!(2107 - 12 - 31), time!(23:59:58)).unwrap()
+            DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)).unwrap()
         );
     }
 }
