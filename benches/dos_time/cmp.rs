@@ -2,19 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-#![feature(test)]
-
-extern crate test;
-
-use dos_date_time::DateTime;
+use dos_date_time::Time;
 use test::Bencher;
 
 #[bench]
 fn equality(b: &mut Bencher) {
-    b.iter(|| DateTime::MIN == DateTime::MIN);
+    b.iter(|| Time::MIN == Time::MIN);
 }
 
 #[bench]
 fn order(b: &mut Bencher) {
-    b.iter(|| DateTime::MAX > DateTime::MIN);
+    b.iter(|| Time::MAX > Time::MIN);
 }

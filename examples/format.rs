@@ -6,7 +6,7 @@
 
 use anyhow::Context;
 use clap::Parser;
-use dos_date_time::DateTime;
+use dos_date_time::{Date, DateTime, Time};
 
 #[derive(Debug, Parser)]
 #[command(version, about)]
@@ -21,7 +21,11 @@ struct Opt {
 fn main() -> anyhow::Result<()> {
     let opt = Opt::parse();
 
-    let dt = DateTime::new(opt.date, opt.time).context("could not convert date and time")?;
+    let (date, time) = (
+        Date::new(opt.date).context("could not convert date")?,
+        Time::new(opt.time).context("could not convert time")?,
+    );
+    let dt = DateTime::new(date, time);
     println!("{dt}");
     Ok(())
 }

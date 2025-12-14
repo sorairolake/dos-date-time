@@ -6,10 +6,11 @@
 
 use core::{error::Error, fmt};
 
+use crate::error::{DateRangeError, DateRangeErrorKind};
+
 /// The error type indicating that a [`DateTime`](crate::DateTime) was out of
 /// range.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-#[allow(clippy::module_name_repetitions)]
 pub struct DateTimeRangeError(DateTimeRangeErrorKind);
 
 impl DateTimeRangeError {
@@ -61,6 +62,16 @@ impl From<DateTimeRangeErrorKind> for DateTimeRangeError {
     }
 }
 
+impl From<DateRangeError> for DateTimeRangeError {
+    #[inline]
+    fn from(err: DateRangeError) -> Self {
+        match err.kind() {
+            DateRangeErrorKind::Negative => Self::new(DateTimeRangeErrorKind::Negative),
+            DateRangeErrorKind::Overflow => Self::new(DateTimeRangeErrorKind::Overflow),
+        }
+    }
+}
+
 /// Details of the error that caused a [`DateTimeRangeError`].
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum DateTimeRangeErrorKind {
@@ -90,7 +101,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn clone_dos_date_time_range_error() {
+    fn clone_date_time_range_error() {
         assert_eq!(
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative).clone(),
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative)
@@ -102,7 +113,7 @@ mod tests {
     }
 
     #[test]
-    fn copy_dos_date_time_range_error() {
+    fn copy_date_time_range_error() {
         {
             let a = DateTimeRangeError::new(DateTimeRangeErrorKind::Negative);
             let b = a;
@@ -117,7 +128,7 @@ mod tests {
     }
 
     #[test]
-    fn debug_dos_date_time_range_error() {
+    fn debug_date_time_range_error() {
         assert_eq!(
             format!(
                 "{:?}",
@@ -135,7 +146,7 @@ mod tests {
     }
 
     #[test]
-    fn dos_date_time_range_error_equality() {
+    fn date_time_range_error_equality() {
         assert_eq!(
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative),
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative)
@@ -155,7 +166,7 @@ mod tests {
     }
 
     #[test]
-    fn kind_dos_date_time_range_error() {
+    fn kind_date_time_range_error() {
         assert_eq!(
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative).kind(),
             DateTimeRangeErrorKind::Negative
@@ -167,13 +178,13 @@ mod tests {
     }
 
     #[test]
-    const fn kind_dos_date_time_range_error_is_const_fn() {
+    const fn kind_date_time_range_error_is_const_fn() {
         const _: DateTimeRangeErrorKind =
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative).kind();
     }
 
     #[test]
-    fn display_dos_date_time_range_error() {
+    fn display_date_time_range_error() {
         assert_eq!(
             format!(
                 "{}",
@@ -191,7 +202,7 @@ mod tests {
     }
 
     #[test]
-    fn source_dos_date_time_range_error() {
+    fn source_date_time_range_error() {
         assert!(
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative)
                 .source()
@@ -205,7 +216,7 @@ mod tests {
     }
 
     #[test]
-    fn from_dos_date_time_range_error_kind_to_dos_date_time_range_error() {
+    fn from_date_time_range_error_kind_to_date_time_range_error() {
         assert_eq!(
             DateTimeRangeError::from(DateTimeRangeErrorKind::Negative),
             DateTimeRangeError::new(DateTimeRangeErrorKind::Negative)
@@ -217,7 +228,7 @@ mod tests {
     }
 
     #[test]
-    fn clone_dos_date_time_range_error_kind() {
+    fn clone_date_time_range_error_kind() {
         assert_eq!(
             DateTimeRangeErrorKind::Negative.clone(),
             DateTimeRangeErrorKind::Negative
@@ -229,7 +240,7 @@ mod tests {
     }
 
     #[test]
-    fn copy_dos_date_time_range_error_kind() {
+    fn copy_date_time_range_error_kind() {
         {
             let a = DateTimeRangeErrorKind::Negative;
             let b = a;
@@ -244,7 +255,7 @@ mod tests {
     }
 
     #[test]
-    fn debug_dos_date_time_range_error_kind() {
+    fn debug_date_time_range_error_kind() {
         assert_eq!(
             format!("{:?}", DateTimeRangeErrorKind::Negative),
             "Negative"
@@ -256,7 +267,7 @@ mod tests {
     }
 
     #[test]
-    fn dos_date_time_range_error_kind_equality() {
+    fn date_time_range_error_kind_equality() {
         assert_eq!(
             DateTimeRangeErrorKind::Negative,
             DateTimeRangeErrorKind::Negative
@@ -276,7 +287,7 @@ mod tests {
     }
 
     #[test]
-    fn display_dos_date_time_range_error_kind() {
+    fn display_date_time_range_error_kind() {
         assert_eq!(
             format!("{}", DateTimeRangeErrorKind::Negative),
             "MS-DOS date and time are before `1980-01-01 00:00:00`"

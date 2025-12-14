@@ -4,6 +4,10 @@
 
 //! Error types for this crate.
 
-mod date_time;
+mod dos_date;
+mod dos_date_time;
 
-pub use self::date_time::{DateTimeRangeError, DateTimeRangeErrorKind};
+pub use self::{
+    dos_date::{DateRangeError, DateRangeErrorKind},
+    dos_date_time::{DateTimeRangeError, DateTimeRangeErrorKind},
+};

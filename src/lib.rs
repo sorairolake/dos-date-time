@@ -36,7 +36,7 @@
 //! assert_eq!(dt, datetime!(2002-11-26 19:25:00));
 //! let dt = DateTime::try_from(dt).unwrap();
 //! assert_eq!(
-//!     (dt.date(), dt.time()),
+//!     (dt.date().to_raw(), dt.time().to_raw()),
 //!     (0b0010_1101_0111_1010, 0b1001_1011_0010_0000)
 //! );
 //!
@@ -87,7 +87,9 @@ extern crate alloc;
 #[cfg(feature = "std")]
 extern crate std;
 
-mod date_time;
+mod dos_date;
+mod dos_date_time;
+mod dos_time;
 pub mod error;
 
 #[cfg(feature = "chrono")]
@@ -96,4 +98,4 @@ pub use chrono;
 pub use jiff;
 pub use time;
 
-pub use crate::date_time::DateTime;
+pub use crate::{dos_date::Date, dos_date_time::DateTime, dos_time::Time};

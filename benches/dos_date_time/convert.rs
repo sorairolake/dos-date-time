@@ -2,10 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-#![feature(test)]
-
-extern crate test;
-
 #[cfg(feature = "chrono")]
 use chrono::NaiveDateTime;
 use dos_date_time::{
