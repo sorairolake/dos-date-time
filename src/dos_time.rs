@@ -88,7 +88,6 @@ impl Time {
     /// );
     /// ```
     #[must_use]
-    #[inline]
     pub const unsafe fn new_unchecked(time: u16) -> Self {
         Self(time)
     }
@@ -139,7 +138,6 @@ impl Time {
     /// assert_eq!(Time::MAX.to_raw(), 0b1011_1111_0111_1101);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn to_raw(self) -> u16 {
         self.0
     }
@@ -212,7 +210,6 @@ impl Default for Time {
     /// #
     /// assert_eq!(Time::default(), Time::MIN);
     /// ```
-    #[inline]
     fn default() -> Self {
         Self::MIN
     }

@@ -87,7 +87,6 @@ impl Date {
     /// );
     /// ```
     #[must_use]
-    #[inline]
     pub const unsafe fn new_unchecked(date: u16) -> Self {
         Self(date)
     }
@@ -141,7 +140,6 @@ impl Date {
     /// assert_eq!(Date::MAX.to_raw(), 0b1111_1111_1001_1111);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn to_raw(self) -> u16 {
         self.0
     }
@@ -212,7 +210,6 @@ impl Default for Date {
     /// #
     /// assert_eq!(Date::default(), Date::MIN);
     /// ```
-    #[inline]
     fn default() -> Self {
         Self::MIN
     }

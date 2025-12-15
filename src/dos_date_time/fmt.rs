@@ -21,7 +21,6 @@ impl fmt::Display for DateTime {
     /// ```
     ///
     /// [RFC 3339 format]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
-    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (date, time) = (self.date(), self.time());
         write!(f, "{date} {time}")

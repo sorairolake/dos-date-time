@@ -14,7 +14,6 @@ use crate::error::{DateRangeError, DateRangeErrorKind};
 pub struct DateTimeRangeError(DateTimeRangeErrorKind);
 
 impl DateTimeRangeError {
-    #[inline]
     pub(crate) const fn new(kind: DateTimeRangeErrorKind) -> Self {
         Self(kind)
     }
@@ -40,14 +39,12 @@ impl DateTimeRangeError {
     /// assert_eq!(err.kind(), DateTimeRangeErrorKind::Overflow);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn kind(&self) -> DateTimeRangeErrorKind {
         self.0
     }
 }
 
 impl fmt::Display for DateTimeRangeError {
-    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.kind().fmt(f)
     }
@@ -56,14 +53,12 @@ impl fmt::Display for DateTimeRangeError {
 impl Error for DateTimeRangeError {}
 
 impl From<DateTimeRangeErrorKind> for DateTimeRangeError {
-    #[inline]
     fn from(kind: DateTimeRangeErrorKind) -> Self {
         Self::new(kind)
     }
 }
 
 impl From<DateRangeError> for DateTimeRangeError {
-    #[inline]
     fn from(err: DateRangeError) -> Self {
         match err.kind() {
             DateRangeErrorKind::Negative => Self::new(DateTimeRangeErrorKind::Negative),
@@ -87,7 +82,6 @@ pub enum DateTimeRangeErrorKind {
 }
 
 impl fmt::Display for DateTimeRangeErrorKind {
-    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Negative => write!(f, "MS-DOS date and time are before `1980-01-01 00:00:00`"),

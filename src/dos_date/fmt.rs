@@ -21,7 +21,6 @@ impl fmt::Display for Date {
     /// ```
     ///
     /// [RFC 3339 format]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
-    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (year, month, day) = (self.year(), u8::from(self.month()), self.day());
         write!(f, "{year:04}-{month:02}-{day:02}")

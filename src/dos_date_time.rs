@@ -54,7 +54,6 @@ impl DateTime {
     /// assert_eq!(DateTime::new(Date::MAX, Time::MAX), DateTime::MAX);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn new(date: Date, time: Time) -> Self {
         Self { date, time }
     }
@@ -116,7 +115,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.date(), Date::MAX);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn date(self) -> Date {
         self.date
     }
@@ -132,7 +130,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.time(), Time::MAX);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn time(self) -> Time {
         self.time
     }
@@ -148,7 +145,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.year(), 2107);
     /// ```
     #[must_use]
-    #[inline]
     pub const fn year(self) -> u16 {
         self.date().year()
     }
@@ -164,7 +160,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.month(), Month::December);
     /// ```
     #[must_use]
-    #[inline]
     pub fn month(self) -> Month {
         self.date().month()
     }
@@ -180,7 +175,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.day(), 31);
     /// ```
     #[must_use]
-    #[inline]
     pub fn day(self) -> u8 {
         self.date().day()
     }
@@ -196,7 +190,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.hour(), 23);
     /// ```
     #[must_use]
-    #[inline]
     pub fn hour(self) -> u8 {
         self.time().hour()
     }
@@ -212,7 +205,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.minute(), 59);
     /// ```
     #[must_use]
-    #[inline]
     pub fn minute(self) -> u8 {
         self.time().minute()
     }
@@ -228,7 +220,6 @@ impl DateTime {
     /// assert_eq!(DateTime::MAX.second(), 58);
     /// ```
     #[must_use]
-    #[inline]
     pub fn second(self) -> u8 {
         self.time().second()
     }
@@ -247,7 +238,6 @@ impl Default for DateTime {
     /// #
     /// assert_eq!(DateTime::default(), DateTime::MIN);
     /// ```
-    #[inline]
     fn default() -> Self {
         Self::MIN
     }
