@@ -124,9 +124,8 @@ impl TryFrom<PrimitiveDateTime> for DateTime {
     /// assert!(DateTime::try_from(datetime!(2108-01-01 00:00:00)).is_err());
     /// ```
     fn try_from(dt: PrimitiveDateTime) -> Result<Self, Self::Error> {
-        let (date, time) = (dt.date().try_into()?, dt.time().into());
-        let dt = Self::new(date, time);
-        Ok(dt)
+        let (date, time) = (dt.date(), dt.time());
+        Self::from_date_time(date, time)
     }
 }
 
