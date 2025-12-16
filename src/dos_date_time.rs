@@ -99,7 +99,7 @@ impl DateTime {
     /// assert!(DateTime::from_date_time(date!(2108-01-01), Time::MIDNIGHT).is_err());
     /// ```
     pub fn from_date_time(date: time::Date, time: time::Time) -> Result<Self, DateTimeRangeError> {
-        let (date, time) = (Date::from_date(date)?, Time::from_time(time));
+        let (date, time) = (date.try_into()?, time.into());
         let dt = Self::new(date, time);
         Ok(dt)
     }

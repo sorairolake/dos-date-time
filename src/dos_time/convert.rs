@@ -48,9 +48,9 @@ impl From<Time> for NaiveTime {
     /// ```
     fn from(time: Time) -> Self {
         let (hour, minute, second) = (
-            u32::from(time.hour()),
-            u32::from(time.minute()),
-            u32::from(time.second()),
+            time.hour().into(),
+            time.minute().into(),
+            time.second().into(),
         );
         Self::from_hms_opt(hour, minute, second)
             .expect("time should be in the range of `NaiveTime`")
@@ -71,9 +71,15 @@ impl From<Time> for civil::Time {
     /// ```
     fn from(time: Time) -> Self {
         let (hour, minute, second) = (
-            i8::try_from(time.hour()).expect("hour should be in the range of `i8`"),
-            i8::try_from(time.minute()).expect("minute should be in the range of `i8`"),
-            i8::try_from(time.second()).expect("second should be in the range of `i8`"),
+            time.hour()
+                .try_into()
+                .expect("hour should be in the range of `i8`"),
+            time.minute()
+                .try_into()
+                .expect("minute should be in the range of `i8`"),
+            time.second()
+                .try_into()
+                .expect("second should be in the range of `i8`"),
         );
         civil::time(hour, minute, second, i32::default())
     }
@@ -131,9 +137,15 @@ impl From<NaiveTime> for Time {
     /// ```
     fn from(time: NaiveTime) -> Self {
         let (hour, minute, second) = (
-            u8::try_from(time.hour()).expect("hour should be in the range of `u8`"),
-            u8::try_from(time.minute()).expect("minute should be in the range of `u8`"),
-            u8::try_from(time.second()).expect("second should be in the range of `u8`"),
+            time.hour()
+                .try_into()
+                .expect("hour should be in the range of `u8`"),
+            time.minute()
+                .try_into()
+                .expect("minute should be in the range of `u8`"),
+            time.second()
+                .try_into()
+                .expect("second should be in the range of `u8`"),
         );
         let time = time::Time::from_hms(hour, minute, second)
             .expect("time should be in the range of `time::Time`");
@@ -163,9 +175,15 @@ impl From<civil::Time> for Time {
     /// ```
     fn from(time: civil::Time) -> Self {
         let (hour, minute, second) = (
-            u8::try_from(time.hour()).expect("hour should be in the range of `u8`"),
-            u8::try_from(time.minute()).expect("minute should be in the range of `u8`"),
-            u8::try_from(time.second()).expect("second should be in the range of `u8`"),
+            time.hour()
+                .try_into()
+                .expect("hour should be in the range of `u8`"),
+            time.minute()
+                .try_into()
+                .expect("minute should be in the range of `u8`"),
+            time.second()
+                .try_into()
+                .expect("second should be in the range of `u8`"),
         );
         let time = time::Time::from_hms(hour, minute, second)
             .expect("time should be in the range of `time::Time`");
