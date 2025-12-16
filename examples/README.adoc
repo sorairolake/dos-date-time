@@ -7,3 +7,7 @@
 link:format.rs[]::
 
   An example of printing MS-DOS date and time in a human-readable format.
+
+link:parse.rs[]::
+
+  An example of printing a human-readable date and time as MS-DOS date and time.

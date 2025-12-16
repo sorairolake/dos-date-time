@@ -26,7 +26,7 @@ time = { version = "0.3.44", default-features = false }
 [dev-dependencies]
 anyhow = "1.0.100"
 clap = { version = "4.5.53", features = ["derive"] }
-time = { version = "0.3.44", features = ["formatting", "macros"] }
+time = { version = "0.3.44", features = ["formatting", "macros", "parsing"] }
 
 [features]
 default = ["std"]
