@@ -4,7 +4,7 @@
 
 [package]
 name = "dos-date-time"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.85.0"
 description = "An MS-DOS date and time library"
@@ -18,10 +18,6 @@ include = ["/LICENSES", "/README.md", "/src"]
 [package.metadata.docs.rs]
 all-features = true
 
-[[example]]
-name = "format"
-required-features = ["std"]
-
 [dependencies]
 chrono = { version = "0.4.42", default-features = false, optional = true }
 jiff = { version = "0.2.16", default-features = false, optional = true }
@@ -30,7 +26,7 @@ time = { version = "0.3.44", default-features = false }
 [dev-dependencies]
 anyhow = "1.0.100"
 clap = { version = "4.5.53", features = ["derive"] }
-time = { version = "0.3.44", features = ["formatting", "macros"] }
+time = { version = "0.3.44", features = ["formatting", "macros", "parsing"] }
 
 [features]
 default = ["std"]

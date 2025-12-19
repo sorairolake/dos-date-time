@@ -5,10 +5,10 @@
 //! Implementations of conversions between [`DateTime`] and other types.
 
 #[cfg(feature = "chrono")]
-use chrono::{Datelike, NaiveDate, NaiveDateTime, NaiveTime, Timelike};
+use chrono::NaiveDateTime;
 #[cfg(feature = "jiff")]
 use jiff::civil;
-use time::{Date, PrimitiveDateTime, Time};
+use time::PrimitiveDateTime;
 
 use super::DateTime;
 use crate::error::DateTimeRangeError;
@@ -34,14 +34,7 @@ impl From<DateTime> for PrimitiveDateTime {
     /// );
     /// ```
     fn from(dt: DateTime) -> Self {
-        let (year, month, day) = (i32::from(dt.year()), dt.month(), dt.day());
-        let date = Date::from_calendar_date(year, month, day)
-            .expect("date should be in the range of `Date`");
-
-        let (hour, minute, second) = (dt.hour(), dt.minute(), dt.second());
-        let time =
-            Time::from_hms(hour, minute, second).expect("time should be in the range of `Time`");
-
+        let (date, time) = (dt.date().into(), dt.time().into());
         Self::new(date, time)
     }
 }
@@ -65,22 +58,7 @@ impl From<DateTime> for NaiveDateTime {
     /// );
     /// ```
     fn from(dt: DateTime) -> Self {
-        let (year, month, day) = (
-            i32::from(dt.year()),
-            u32::from(u8::from(dt.month())),
-            u32::from(dt.day()),
-        );
-        let date = NaiveDate::from_ymd_opt(year, month, day)
-            .expect("date should be in the range of `NaiveDate`");
-
-        let (hour, minute, second) = (
-            u32::from(dt.hour()),
-            u32::from(dt.minute()),
-            u32::from(dt.second()),
-        );
-        let time = NaiveTime::from_hms_opt(hour, minute, second)
-            .expect("time should be in the range of `NaiveTime`");
-
+        let (date, time) = (dt.date().into(), dt.time().into());
         Self::new(date, time)
     }
 }
@@ -104,21 +82,8 @@ impl From<DateTime> for civil::DateTime {
     /// );
     /// ```
     fn from(dt: DateTime) -> Self {
-        let (year, month, day) = (
-            i16::try_from(dt.year()).expect("year should be in the range of `i16`"),
-            i8::try_from(u8::from(dt.month())).expect("month should be in the range of `i8`"),
-            i8::try_from(dt.day()).expect("day should be in the range of `i8`"),
-        );
-        let date = civil::date(year, month, day);
-
-        let (hour, minute, second) = (
-            i8::try_from(dt.hour()).expect("hour should be in the range of `i8`"),
-            i8::try_from(dt.minute()).expect("minute should be in the range of `i8`"),
-            i8::try_from(dt.second()).expect("second should be in the range of `i8`"),
-        );
-        let time = civil::time(hour, minute, second, i32::default());
-
-        date.to_datetime(time)
+        let (date, time) = (dt.date().into(), dt.time().into());
+        Self::from_parts(date, time)
     }
 }
 
@@ -158,9 +123,9 @@ impl TryFrom<PrimitiveDateTime> for DateTime {
     /// // After `2107-12-31 23:59:59`.
     /// assert!(DateTime::try_from(datetime!(2108-01-01 00:00:00)).is_err());
     /// ```
-    #[inline]
     fn try_from(dt: PrimitiveDateTime) -> Result<Self, Self::Error> {
-        Self::from_date_time(dt.date(), dt.time())
+        let (date, time) = (dt.date(), dt.time());
+        Self::from_date_time(date, time)
     }
 }
 
@@ -202,26 +167,9 @@ impl TryFrom<NaiveDateTime> for DateTime {
     /// assert!(DateTime::try_from("2108-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()).is_err());
     /// ```
     fn try_from(dt: NaiveDateTime) -> Result<Self, Self::Error> {
-        let (year, month, day) = (
-            dt.year(),
-            u8::try_from(dt.month())
-                .expect("month should be in the range of `u8`")
-                .try_into()
-                .expect("month should be in the range of `Month`"),
-            u8::try_from(dt.day()).expect("day should be in the range of `u8`"),
-        );
-        let date = Date::from_calendar_date(year, month, day)
-            .expect("date should be in the range of `Date`");
-
-        let (hour, minute, second) = (
-            u8::try_from(dt.hour()).expect("hour should be in the range of `u8`"),
-            u8::try_from(dt.minute()).expect("minute should be in the range of `u8`"),
-            u8::try_from(dt.second()).expect("second should be in the range of `u8`"),
-        );
-        let time =
-            Time::from_hms(hour, minute, second).expect("time should be in the range of `Time`");
-
-        Self::from_date_time(date, time)
+        let (date, time) = (dt.date().try_into()?, dt.time().into());
+        let dt = Self::new(date, time);
+        Ok(dt)
     }
 }
 
@@ -263,26 +211,9 @@ impl TryFrom<civil::DateTime> for DateTime {
     /// assert!(DateTime::try_from(civil::date(2108, 1, 1).at(0, 0, 0, 0)).is_err());
     /// ```
     fn try_from(dt: civil::DateTime) -> Result<Self, Self::Error> {
-        let (year, month, day) = (
-            i32::from(dt.year()),
-            u8::try_from(dt.month())
-                .expect("month should be in the range of `u8`")
-                .try_into()
-                .expect("month should be in the range of `Month`"),
-            u8::try_from(dt.day()).expect("day should be in the range of `u8`"),
-        );
-        let date = Date::from_calendar_date(year, month, day)
-            .expect("date should be in the range of `Date`");
-
-        let (hour, minute, second) = (
-            u8::try_from(dt.hour()).expect("hour should be in the range of `u8`"),
-            u8::try_from(dt.minute()).expect("minute should be in the range of `u8`"),
-            u8::try_from(dt.second()).expect("second should be in the range of `u8`"),
-        );
-        let time =
-            Time::from_hms(hour, minute, second).expect("time should be in the range of `Time`");
-
-        Self::from_date_time(date, time)
+        let (date, time) = (dt.date().try_into()?, dt.time().into());
+        let dt = Self::new(date, time);
+        Ok(dt)
     }
 }
 
@@ -291,7 +222,7 @@ mod tests {
     use time::macros::datetime;
 
     use super::*;
-    use crate::error::DateTimeRangeErrorKind;
+    use crate::{Date, Time, error::DateTimeRangeErrorKind};
 
     #[test]
     fn from_date_time_to_primitive_date_time() {
@@ -301,16 +232,18 @@ mod tests {
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
-            PrimitiveDateTime::from(
-                DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
-            ),
+            PrimitiveDateTime::from(DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )),
             datetime!(2002-11-26 19:25:00)
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
-            PrimitiveDateTime::from(
-                DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
-            ),
+            PrimitiveDateTime::from(DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )),
             datetime!(2018-11-17 10:38:30)
         );
         assert_eq!(
@@ -328,16 +261,18 @@ mod tests {
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
-            NaiveDateTime::from(
-                DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
-            ),
+            NaiveDateTime::from(DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )),
             "2002-11-26T19:25:00".parse::<NaiveDateTime>().unwrap()
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
-            NaiveDateTime::from(
-                DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
-            ),
+            NaiveDateTime::from(DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )),
             "2018-11-17T10:38:30".parse::<NaiveDateTime>().unwrap()
         );
         assert_eq!(
@@ -355,16 +290,18 @@ mod tests {
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
-            civil::DateTime::from(
-                DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
-            ),
+            civil::DateTime::from(DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )),
             civil::date(2002, 11, 26).at(19, 25, 0, 0)
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
-            civil::DateTime::from(
-                DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
-            ),
+            civil::DateTime::from(DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )),
             civil::date(2018, 11, 17).at(10, 38, 30, 0)
         );
         assert_eq!(
@@ -398,12 +335,18 @@ mod tests {
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
             DateTime::try_from(datetime!(2002-11-26 19:25:00)).unwrap(),
-            DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
+            DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
             DateTime::try_from(datetime!(2018-11-17 10:38:30)).unwrap(),
-            DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
+            DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )
         );
         assert_eq!(
             DateTime::try_from(datetime!(2107-12-31 23:59:58)).unwrap(),
@@ -452,12 +395,18 @@ mod tests {
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
             DateTime::try_from("2002-11-26T19:25:00".parse::<NaiveDateTime>().unwrap()).unwrap(),
-            DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
+            DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
             DateTime::try_from("2018-11-17T10:38:30".parse::<NaiveDateTime>().unwrap()).unwrap(),
-            DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
+            DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )
         );
         assert_eq!(
             DateTime::try_from("2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()).unwrap(),
@@ -506,12 +455,18 @@ mod tests {
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
             DateTime::try_from(civil::date(2002, 11, 26).at(19, 25, 0, 0)).unwrap(),
-            DateTime::new(0b0010_1101_0111_1010, 0b1001_1011_0010_0000).unwrap()
+            DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
             DateTime::try_from(civil::date(2018, 11, 17).at(10, 38, 30, 0)).unwrap(),
-            DateTime::new(0b0100_1101_0111_0001, 0b0101_0100_1100_1111).unwrap()
+            DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )
         );
         assert_eq!(
             DateTime::try_from(civil::date(2107, 12, 31).at(23, 59, 58, 0)).unwrap(),

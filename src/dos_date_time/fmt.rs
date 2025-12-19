@@ -21,14 +21,9 @@ impl fmt::Display for DateTime {
     /// ```
     ///
     /// [RFC 3339 format]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
-    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (year, month, day) = (self.year(), u8::from(self.month()), self.day());
-        let (hour, minute, second) = (self.hour(), self.minute(), self.second());
-        write!(
-            f,
-            "{year:04}-{month:02}-{day:02} {hour:02}:{minute:02}:{second:02}"
-        )
+        let (date, time) = (self.date(), self.time());
+        write!(f, "{date} {time}")
     }
 }
 
@@ -42,7 +37,7 @@ mod tests {
     fn debug() {
         assert_eq!(
             format!("{:?}", DateTime::MIN),
-            "DateTime { date: 33, time: 0 }"
+            "DateTime { date: Date(33), time: Time(0) }"
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
@@ -50,7 +45,7 @@ mod tests {
                 "{:?}",
                 DateTime::try_from(datetime!(2002-11-26 19:25:00)).unwrap()
             ),
-            "DateTime { date: 11642, time: 39712 }"
+            "DateTime { date: Date(11642), time: Time(39712) }"
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
@@ -58,11 +53,11 @@ mod tests {
                 "{:?}",
                 DateTime::try_from(datetime!(2018-11-17 10:38:30)).unwrap()
             ),
-            "DateTime { date: 19825, time: 21711 }"
+            "DateTime { date: Date(19825), time: Time(21711) }"
         );
         assert_eq!(
             format!("{:?}", DateTime::MAX),
-            "DateTime { date: 65439, time: 49021 }"
+            "DateTime { date: Date(65439), time: Time(49021) }"
         );
     }
 

@@ -6,25 +6,25 @@
 
 extern crate test;
 
-use dos_date_time::{
-    DateTime,
-    time::{Time, macros::date},
-};
+mod cmp;
+mod convert;
+
+use dos_date_time::{Date, DateTime, Time, time::macros::date};
 use test::Bencher;
 
 #[bench]
 fn new(b: &mut Bencher) {
-    b.iter(|| DateTime::new(0b0000_0000_0010_0001, u16::MIN).unwrap());
-}
-
-#[bench]
-fn new_unchecked(b: &mut Bencher) {
-    b.iter(|| unsafe { DateTime::new_unchecked(0b0000_0000_0010_0001, u16::MIN) });
+    b.iter(|| DateTime::new(Date::MIN, Time::MIN));
 }
 
 #[bench]
 fn from_date_time(b: &mut Bencher) {
-    b.iter(|| DateTime::from_date_time(date!(1980 - 01 - 01), Time::MIDNIGHT).unwrap());
+    b.iter(|| DateTime::from_date_time(date!(1980-01-01), time::Time::MIDNIGHT).unwrap());
+}
+
+#[bench]
+fn is_valid(b: &mut Bencher) {
+    b.iter(|| DateTime::MIN.is_valid());
 }
 
 #[bench]

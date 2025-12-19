@@ -18,9 +18,6 @@ MS-DOS date and time are packed 16-bit unsigned integer values that specify the
 date and time an MS-DOS file was last written to, and are used as timestamps
 such as [FAT] or [ZIP] file format.
 
-> [!CAUTION]
-> The resolution of MS-DOS date and time is 2 seconds.
-
 ## Usage
 
 Run the following command in your project directory:
