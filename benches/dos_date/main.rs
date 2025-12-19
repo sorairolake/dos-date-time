@@ -28,6 +28,11 @@ fn from_date(b: &mut Bencher) {
 }
 
 #[bench]
+fn is_valid(b: &mut Bencher) {
+    b.iter(|| Date::MIN.is_valid());
+}
+
+#[bench]
 fn to_raw(b: &mut Bencher) {
     b.iter(|| Date::MIN.to_raw());
 }

@@ -129,6 +129,28 @@ impl Date {
         }
     }
 
+    /// Returns [`true`] if `self` is a valid MS-DOS date, and [`false`]
+    /// otherwise.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use dos_date_time::Date;
+    /// #
+    /// assert_eq!(Date::MIN.is_valid(), true);
+    /// assert_eq!(Date::MAX.is_valid(), true);
+    ///
+    /// // The Day field is 0.
+    /// assert_eq!(
+    ///     unsafe { Date::new_unchecked(0b0000_0000_0010_0000) }.is_valid(),
+    ///     false
+    /// );
+    /// ```
+    #[must_use]
+    pub fn is_valid(self) -> bool {
+        Self::new(self.to_raw()).is_some()
+    }
+
     /// Returns the MS-DOS date of this `Date` as the underlying [`u16`] value.
     ///
     /// # Examples
@@ -338,6 +360,28 @@ mod tests {
             Date::from_date(date!(2108-01-01)).unwrap_err(),
             DateRangeErrorKind::Overflow.into()
         );
+    }
+
+    #[test]
+    fn is_valid() {
+        assert!(Date::MIN.is_valid());
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert!(Date::new(0b0010_1101_0111_1010).unwrap().is_valid());
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert!(Date::new(0b0100_1101_0111_0001).unwrap().is_valid());
+        assert!(Date::MAX.is_valid());
+    }
+
+    #[test]
+    fn is_valid_with_invalid_date() {
+        // The Day field is 0.
+        assert!(!unsafe { Date::new_unchecked(0b0000_0000_0010_0000) }.is_valid());
+        // The Day field is 30, which is after the last day of February.
+        assert!(!unsafe { Date::new_unchecked(0b0000_0000_0101_1110) }.is_valid());
+        // The Month field is 0.
+        assert!(!unsafe { Date::new_unchecked(0b0000_0000_0000_0001) }.is_valid());
+        // The Month field is 13.
+        assert!(!unsafe { Date::new_unchecked(0b0000_0001_1010_0001) }.is_valid());
     }
 
     #[test]

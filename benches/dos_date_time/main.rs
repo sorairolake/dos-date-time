@@ -23,6 +23,11 @@ fn from_date_time(b: &mut Bencher) {
 }
 
 #[bench]
+fn is_valid(b: &mut Bencher) {
+    b.iter(|| DateTime::MIN.is_valid());
+}
+
+#[bench]
 fn date(b: &mut Bencher) {
     b.iter(|| DateTime::MIN.date());
 }

@@ -23,6 +23,11 @@ fn from_time(b: &mut Bencher) {
 }
 
 #[bench]
+fn is_valid(b: &mut Bencher) {
+    b.iter(|| Time::MIN.is_valid());
+}
+
+#[bench]
 fn to_raw(b: &mut Bencher) {
     b.iter(|| Time::MIN.to_raw());
 }

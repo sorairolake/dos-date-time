@@ -127,6 +127,28 @@ impl Time {
         unsafe { Self::new_unchecked(time) }
     }
 
+    /// Returns [`true`] if `self` is a valid MS-DOS time, and [`false`]
+    /// otherwise.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use dos_date_time::Time;
+    /// #
+    /// assert_eq!(Time::MIN.is_valid(), true);
+    /// assert_eq!(Time::MAX.is_valid(), true);
+    ///
+    /// // The DoubleSeconds field is 30.
+    /// assert_eq!(
+    ///     unsafe { Time::new_unchecked(0b0000_0000_0001_1110) }.is_valid(),
+    ///     false
+    /// );
+    /// ```
+    #[must_use]
+    pub fn is_valid(self) -> bool {
+        Self::new(self.to_raw()).is_some()
+    }
+
     /// Returns the MS-DOS time of this `Time` as the underlying [`u16`] value.
     ///
     /// # Examples
@@ -313,6 +335,26 @@ mod tests {
         );
         assert_eq!(Time::from_time(time!(23:59:58)), Time::MAX);
         assert_eq!(Time::from_time(time!(23:59:59)), Time::MAX);
+    }
+
+    #[test]
+    fn is_valid() {
+        assert!(Time::MIN.is_valid());
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert!(Time::new(0b1001_1011_0010_0000).unwrap().is_valid());
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert!(Time::new(0b0101_0100_1100_1111).unwrap().is_valid());
+        assert!(Time::MAX.is_valid());
+    }
+
+    #[test]
+    fn is_valid_with_invalid_time() {
+        // The DoubleSeconds field is 30.
+        assert!(!unsafe { Time::new_unchecked(0b0000_0000_0001_1110) }.is_valid());
+        // The Minute field is 60.
+        assert!(!unsafe { Time::new_unchecked(0b0000_0111_1000_0000) }.is_valid());
+        // The Hour field is 24.
+        assert!(!unsafe { Time::new_unchecked(0b1100_0000_0000_0000) }.is_valid());
     }
 
     #[test]

@@ -104,6 +104,30 @@ impl DateTime {
         Ok(dt)
     }
 
+    /// Returns [`true`] if `self` is valid MS-DOS date and time, and [`false`]
+    /// otherwise.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # use dos_date_time::{Date, DateTime, Time};
+    /// #
+    /// assert_eq!(DateTime::MIN.is_valid(), true);
+    /// assert_eq!(DateTime::MAX.is_valid(), true);
+    ///
+    /// assert_eq!(
+    ///     DateTime::new(unsafe { Date::new_unchecked(u16::MAX) }, unsafe {
+    ///         Time::new_unchecked(u16::MAX)
+    ///     })
+    ///     .is_valid(),
+    ///     false
+    /// );
+    /// ```
+    #[must_use]
+    pub fn is_valid(self) -> bool {
+        self.date().is_valid() && self.time().is_valid()
+    }
+
     /// Gets the [`Date`] of this `DateTime`.
     ///
     /// # Examples
@@ -349,6 +373,99 @@ mod tests {
         assert_eq!(
             DateTime::from_date_time(date!(2108-01-01), time::Time::MIDNIGHT).unwrap_err(),
             DateTimeRangeErrorKind::Overflow.into()
+        );
+    }
+
+    #[test]
+    fn is_valid() {
+        assert!(DateTime::MIN.is_valid());
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert!(
+            DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )
+            .is_valid()
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert!(
+            DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )
+            .is_valid()
+        );
+        assert!(DateTime::MAX.is_valid());
+    }
+
+    #[test]
+    fn is_valid_with_invalid_date() {
+        // The Day field is 0.
+        assert!(
+            !DateTime::new(
+                unsafe { Date::new_unchecked(0b0000_0000_0010_0000) },
+                Time::MIN
+            )
+            .is_valid()
+        );
+        // The Day field is 30, which is after the last day of February.
+        assert!(
+            !DateTime::new(
+                unsafe { Date::new_unchecked(0b0000_0000_0101_1110) },
+                Time::MIN
+            )
+            .is_valid()
+        );
+        // The Month field is 0.
+        assert!(
+            !DateTime::new(
+                unsafe { Date::new_unchecked(0b0000_0000_0000_0001) },
+                Time::MIN
+            )
+            .is_valid()
+        );
+        // The Month field is 13.
+        assert!(
+            !DateTime::new(
+                unsafe { Date::new_unchecked(0b0000_0001_1010_0001) },
+                Time::MIN
+            )
+            .is_valid()
+        );
+    }
+
+    #[test]
+    fn is_valid_with_invalid_time() {
+        // The DoubleSeconds field is 30.
+        assert!(
+            !DateTime::new(Date::MIN, unsafe {
+                Time::new_unchecked(0b0000_0000_0001_1110)
+            })
+            .is_valid()
+        );
+        // The Minute field is 60.
+        assert!(
+            !DateTime::new(Date::MIN, unsafe {
+                Time::new_unchecked(0b0000_0111_1000_0000)
+            })
+            .is_valid()
+        );
+        // The Hour field is 24.
+        assert!(
+            !DateTime::new(Date::MIN, unsafe {
+                Time::new_unchecked(0b1100_0000_0000_0000)
+            })
+            .is_valid()
+        );
+    }
+
+    #[test]
+    fn is_valid_with_invalid_date_time() {
+        assert!(
+            !DateTime::new(unsafe { Date::new_unchecked(u16::MAX) }, unsafe {
+                Time::new_unchecked(u16::MAX)
+            })
+            .is_valid()
         );
     }
 

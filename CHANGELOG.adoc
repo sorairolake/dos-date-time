@@ -22,6 +22,7 @@ project adheres to https://semver.org/[Semantic Versioning].
 * Add `Time` ({pull-request-url}/13[#13])
 * Add `DateRangeError` ({pull-request-url}/13[#13])
 * Add `DateRangeErrorKind` ({pull-request-url}/13[#13])
+* Add `is_valid` methods ({pull-request-url}/18[#18])
 
 === Changed
 
