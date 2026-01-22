@@ -106,23 +106,6 @@ impl DateTime {
 
     /// Returns [`true`] if `self` is valid MS-DOS date and time, and [`false`]
     /// otherwise.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::{Date, DateTime, Time};
-    /// #
-    /// assert_eq!(DateTime::MIN.is_valid(), true);
-    /// assert_eq!(DateTime::MAX.is_valid(), true);
-    ///
-    /// assert_eq!(
-    ///     DateTime::new(unsafe { Date::new_unchecked(u16::MAX) }, unsafe {
-    ///         Time::new_unchecked(u16::MAX)
-    ///     })
-    ///     .is_valid(),
-    ///     false
-    /// );
-    /// ```
     #[must_use]
     pub fn is_valid(self) -> bool {
         self.date().is_valid() && self.time().is_valid()

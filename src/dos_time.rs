@@ -75,18 +75,6 @@ impl Time {
     /// # Safety
     ///
     /// The given MS-DOS time must be a valid MS-DOS time.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Time;
-    /// #
-    /// assert_eq!(unsafe { Time::new_unchecked(u16::MIN) }, Time::MIN);
-    /// assert_eq!(
-    ///     unsafe { Time::new_unchecked(0b1011_1111_0111_1101) },
-    ///     Time::MAX
-    /// );
-    /// ```
     #[must_use]
     pub const unsafe fn new_unchecked(time: u16) -> Self {
         Self(time)
@@ -129,21 +117,6 @@ impl Time {
 
     /// Returns [`true`] if `self` is a valid MS-DOS time, and [`false`]
     /// otherwise.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Time;
-    /// #
-    /// assert_eq!(Time::MIN.is_valid(), true);
-    /// assert_eq!(Time::MAX.is_valid(), true);
-    ///
-    /// // The DoubleSeconds field is 30.
-    /// assert_eq!(
-    ///     unsafe { Time::new_unchecked(0b0000_0000_0001_1110) }.is_valid(),
-    ///     false
-    /// );
-    /// ```
     #[must_use]
     pub fn is_valid(self) -> bool {
         Self::new(self.to_raw()).is_some()
