@@ -108,7 +108,6 @@ impl Time {
             u16::from(time.minute()),
             u16::from(time.second() / 2),
         );
-        // <https://learn.microsoft.com/en-us/windows/win32/fileio/exfat-specification#7481-doubleseconds-field>.
         let second = second.min(29);
         let time = (hour << 11) | (minute << 5) | second;
         // SAFETY: `time` is a valid as the MS-DOS time.
