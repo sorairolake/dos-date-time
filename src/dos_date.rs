@@ -54,11 +54,11 @@ impl Date {
     pub fn new(date: u16) -> Option<Self> {
         let (year, month, day) = (
             (1980 + (date >> 9)).into(),
-            u8::try_from((date >> 5) & 0x0f)
+            u8::try_from((date >> 5) & 0x0F)
                 .expect("month should be in the range of `u8`")
                 .try_into()
                 .ok()?,
-            (date & 0x1f)
+            (date & 0x1F)
                 .try_into()
                 .expect("day should be in the range of `u8`"),
         );
@@ -164,7 +164,7 @@ impl Date {
     /// ```
     #[must_use]
     pub fn month(self) -> Month {
-        u8::try_from((self.to_raw() >> 5) & 0x0f)
+        u8::try_from((self.to_raw() >> 5) & 0x0F)
             .expect("month should be in the range of `u8`")
             .try_into()
             .expect("month should be in the range of `Month`")
@@ -183,7 +183,7 @@ impl Date {
     /// ```
     #[must_use]
     pub fn day(self) -> u8 {
-        (self.to_raw() & 0x1f)
+        (self.to_raw() & 0x1F)
             .try_into()
             .expect("day should be in the range of `u8`")
     }

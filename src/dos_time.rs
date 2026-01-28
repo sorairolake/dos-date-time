@@ -58,10 +58,10 @@ impl Time {
             (time >> 11)
                 .try_into()
                 .expect("hour should be in the range of `u8`"),
-            ((time >> 5) & 0x3f)
+            ((time >> 5) & 0x3F)
                 .try_into()
                 .expect("minute should be in the range of `u8`"),
-            ((time & 0x1f) * 2)
+            ((time & 0x1F) * 2)
                 .try_into()
                 .expect("second should be in the range of `u8`"),
         );
@@ -167,7 +167,7 @@ impl Time {
     /// ```
     #[must_use]
     pub fn minute(self) -> u8 {
-        ((self.to_raw() >> 5) & 0x3f)
+        ((self.to_raw() >> 5) & 0x3F)
             .try_into()
             .expect("minute should be in the range of `u8`")
     }
@@ -185,7 +185,7 @@ impl Time {
     /// ```
     #[must_use]
     pub fn second(self) -> u8 {
-        ((self.to_raw() & 0x1f) * 2)
+        ((self.to_raw() & 0x1F) * 2)
             .try_into()
             .expect("second should be in the range of `u8`")
     }
