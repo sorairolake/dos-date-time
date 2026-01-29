@@ -17,16 +17,12 @@ use crate::error::{DateRangeError, DateRangeErrorKind};
 
 /// `Date` is a type that represents the [MS-DOS date].
 ///
-/// This is a packed 16-bit unsigned integer value that specify the date an
-/// MS-DOS file was last written to, and is used as timestamps such as [FAT] or
-/// [ZIP] file format.
+/// This is a packed 16-bit unsigned integer value.
 ///
 /// See the [format specification] for [Kaitai Struct] for more details on the
 /// structure of the MS-DOS date.
 ///
 /// [MS-DOS date]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
-/// [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
-/// [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 /// [format specification]: https://formats.kaitai.io/dos_datetime/
 /// [Kaitai Struct]: https://kaitai.io/
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
