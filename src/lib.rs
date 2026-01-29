@@ -57,7 +57,7 @@
 //! ```
 //! use dos_date_time::{
 //!     DateTime,
-//!     time::{PrimitiveDateTime, format_description::well_known::Rfc3339},
+//!     time::{PrimitiveDateTime, format_description::well_known::Rfc2822},
 //! };
 //!
 //! let dt = DateTime::MIN;
@@ -65,9 +65,9 @@
 //!
 //! let dt = PrimitiveDateTime::from(dt)
 //!     .as_utc()
-//!     .format(&Rfc3339)
+//!     .format(&Rfc2822)
 //!     .unwrap();
-//! assert_eq!(format!("{dt}"), "1980-01-01T00:00:00Z");
+//! assert_eq!(format!("{dt}"), "Tue, 01 Jan 1980 00:00:00 +0000");
 //! ```
 //!
 //! [MS-DOS date and time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
