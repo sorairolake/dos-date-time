@@ -75,7 +75,7 @@
 //! [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 //! [RFC 3339 format]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
 
-#![doc(html_root_url = "https://docs.rs/dos-date-time/0.2.0/")]
+#![doc(html_root_url = "https://docs.rs/dos-date-time/0.2.1/")]
 #![no_std]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 // Lint levels of rustc.
