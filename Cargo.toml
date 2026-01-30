@@ -4,7 +4,7 @@
 
 [package]
 name = "dos-date-time"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 rust-version = "1.88.0"
 description = "An MS-DOS date and time library"
