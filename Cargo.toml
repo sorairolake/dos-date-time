@@ -6,7 +6,7 @@
 name = "dos-date-time"
 version = "0.2.0"
 edition = "2024"
-rust-version = "1.85.0"
+rust-version = "1.88.0"
 description = "An MS-DOS date and time library"
 documentation = "https://docs.rs/dos-date-time"
 repository = "https://github.com/sorairolake/dos-date-time"
@@ -21,12 +21,12 @@ all-features = true
 [dependencies]
 chrono = { version = "0.4.43", default-features = false, optional = true }
 jiff = { version = "0.2.18", default-features = false, optional = true }
-time = { version = "0.3.45", default-features = false }
+time = { version = "0.3.46", default-features = false }
 
 [dev-dependencies]
 anyhow = "1.0.100"
-clap = { version = "4.5.54", features = ["derive"] }
-time = { version = "0.3.45", features = ["formatting", "macros", "parsing"] }
+clap = { version = "4.5.56", features = ["derive"] }
+time = { version = "0.3.46", features = ["formatting", "macros", "parsing"] }
 
 [features]
 default = ["std"]
