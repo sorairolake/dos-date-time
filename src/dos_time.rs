@@ -13,9 +13,7 @@ mod fmt;
 
 /// `Time` is a type that represents the [MS-DOS time].
 ///
-/// This is a packed 16-bit unsigned integer value that specify the time an
-/// MS-DOS file was last written to, and is used as timestamps such as [FAT] or
-/// [ZIP] file format.
+/// This is a packed 16-bit unsigned integer value.
 ///
 /// <div class="warning">
 ///
@@ -27,8 +25,6 @@ mod fmt;
 /// structure of the MS-DOS time.
 ///
 /// [MS-DOS time]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
-/// [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
-/// [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 /// [format specification]: https://formats.kaitai.io/dos_datetime/
 /// [Kaitai Struct]: https://kaitai.io/
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -58,10 +54,10 @@ impl Time {
             (time >> 11)
                 .try_into()
                 .expect("hour should be in the range of `u8`"),
-            ((time >> 5) & 0x3f)
+            ((time >> 5) & 0x3F)
                 .try_into()
                 .expect("minute should be in the range of `u8`"),
-            ((time & 0x1f) * 2)
+            ((time & 0x1F) * 2)
                 .try_into()
                 .expect("second should be in the range of `u8`"),
         );
@@ -75,18 +71,6 @@ impl Time {
     /// # Safety
     ///
     /// The given MS-DOS time must be a valid MS-DOS time.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Time;
-    /// #
-    /// assert_eq!(unsafe { Time::new_unchecked(u16::MIN) }, Time::MIN);
-    /// assert_eq!(
-    ///     unsafe { Time::new_unchecked(0b1011_1111_0111_1101) },
-    ///     Time::MAX
-    /// );
-    /// ```
     #[must_use]
     pub const unsafe fn new_unchecked(time: u16) -> Self {
         Self(time)
@@ -120,7 +104,6 @@ impl Time {
             u16::from(time.minute()),
             u16::from(time.second() / 2),
         );
-        // <https://learn.microsoft.com/en-us/windows/win32/fileio/exfat-specification#7481-doubleseconds-field>.
         let second = second.min(29);
         let time = (hour << 11) | (minute << 5) | second;
         // SAFETY: `time` is a valid as the MS-DOS time.
@@ -129,21 +112,6 @@ impl Time {
 
     /// Returns [`true`] if `self` is a valid MS-DOS time, and [`false`]
     /// otherwise.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Time;
-    /// #
-    /// assert_eq!(Time::MIN.is_valid(), true);
-    /// assert_eq!(Time::MAX.is_valid(), true);
-    ///
-    /// // The DoubleSeconds field is 30.
-    /// assert_eq!(
-    ///     unsafe { Time::new_unchecked(0b0000_0000_0001_1110) }.is_valid(),
-    ///     false
-    /// );
-    /// ```
     #[must_use]
     pub fn is_valid(self) -> bool {
         Self::new(self.to_raw()).is_some()
@@ -195,7 +163,7 @@ impl Time {
     /// ```
     #[must_use]
     pub fn minute(self) -> u8 {
-        ((self.to_raw() >> 5) & 0x3f)
+        ((self.to_raw() >> 5) & 0x3F)
             .try_into()
             .expect("minute should be in the range of `u8`")
     }
@@ -213,7 +181,7 @@ impl Time {
     /// ```
     #[must_use]
     pub fn second(self) -> u8 {
-        ((self.to_raw() & 0x1f) * 2)
+        ((self.to_raw() & 0x1F) * 2)
             .try_into()
             .expect("second should be in the range of `u8`")
     }

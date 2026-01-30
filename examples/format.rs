@@ -22,8 +22,8 @@ fn main() -> anyhow::Result<()> {
     let opt = Opt::parse();
 
     let (date, time) = (
-        Date::new(opt.date).context("could not convert date")?,
-        Time::new(opt.time).context("could not convert time")?,
+        Date::new(opt.date).context("could not convert MS-DOS date")?,
+        Time::new(opt.time).context("could not convert MS-DOS time")?,
     );
     let dt = DateTime::new(date, time);
     println!("{dt}");

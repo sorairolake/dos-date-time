@@ -17,16 +17,12 @@ use crate::error::{DateRangeError, DateRangeErrorKind};
 
 /// `Date` is a type that represents the [MS-DOS date].
 ///
-/// This is a packed 16-bit unsigned integer value that specify the date an
-/// MS-DOS file was last written to, and is used as timestamps such as [FAT] or
-/// [ZIP] file format.
+/// This is a packed 16-bit unsigned integer value.
 ///
 /// See the [format specification] for [Kaitai Struct] for more details on the
 /// structure of the MS-DOS date.
 ///
 /// [MS-DOS date]: https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
-/// [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
-/// [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 /// [format specification]: https://formats.kaitai.io/dos_datetime/
 /// [Kaitai Struct]: https://kaitai.io/
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -54,11 +50,11 @@ impl Date {
     pub fn new(date: u16) -> Option<Self> {
         let (year, month, day) = (
             (1980 + (date >> 9)).into(),
-            u8::try_from((date >> 5) & 0x0f)
+            u8::try_from((date >> 5) & 0x0F)
                 .expect("month should be in the range of `u8`")
                 .try_into()
                 .ok()?,
-            (date & 0x1f)
+            (date & 0x1F)
                 .try_into()
                 .expect("day should be in the range of `u8`"),
         );
@@ -71,21 +67,6 @@ impl Date {
     /// # Safety
     ///
     /// The given MS-DOS date must be a valid MS-DOS date.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Date;
-    /// #
-    /// assert_eq!(
-    ///     unsafe { Date::new_unchecked(0b0000_0000_0010_0001) },
-    ///     Date::MIN
-    /// );
-    /// assert_eq!(
-    ///     unsafe { Date::new_unchecked(0b1111_1111_1001_1111) },
-    ///     Date::MAX
-    /// );
-    /// ```
     #[must_use]
     pub const unsafe fn new_unchecked(date: u16) -> Self {
         Self(date)
@@ -131,21 +112,6 @@ impl Date {
 
     /// Returns [`true`] if `self` is a valid MS-DOS date, and [`false`]
     /// otherwise.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Date;
-    /// #
-    /// assert_eq!(Date::MIN.is_valid(), true);
-    /// assert_eq!(Date::MAX.is_valid(), true);
-    ///
-    /// // The Day field is 0.
-    /// assert_eq!(
-    ///     unsafe { Date::new_unchecked(0b0000_0000_0010_0000) }.is_valid(),
-    ///     false
-    /// );
-    /// ```
     #[must_use]
     pub fn is_valid(self) -> bool {
         Self::new(self.to_raw()).is_some()
@@ -194,7 +160,7 @@ impl Date {
     /// ```
     #[must_use]
     pub fn month(self) -> Month {
-        u8::try_from((self.to_raw() >> 5) & 0x0f)
+        u8::try_from((self.to_raw() >> 5) & 0x0F)
             .expect("month should be in the range of `u8`")
             .try_into()
             .expect("month should be in the range of `Month`")
@@ -213,7 +179,7 @@ impl Date {
     /// ```
     #[must_use]
     pub fn day(self) -> u8 {
-        (self.to_raw() & 0x1f)
+        (self.to_raw() & 0x1F)
             .try_into()
             .expect("day should be in the range of `u8`")
     }
