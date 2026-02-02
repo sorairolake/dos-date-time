@@ -29,7 +29,7 @@ clap = { version = "4.5.56", features = ["derive"] }
 time = { version = "0.3.46", features = ["formatting", "macros", "parsing"] }
 
 [features]
-default = ["chrono", "jiff", "std"]
+default = ["std"]
 chrono = ["dep:chrono"]
 jiff = ["dep:jiff"]
 std = ["chrono?/std", "jiff?/std", "time/std"]
