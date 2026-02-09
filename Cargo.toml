@@ -24,7 +24,7 @@ jiff = { version = "0.2.19", default-features = false, optional = true }
 time = { version = "0.3.46", default-features = false }
 
 [dev-dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 clap = { version = "4.5.57", features = ["derive"] }
 time = { version = "0.3.46", features = ["formatting", "macros", "parsing"] }
 
