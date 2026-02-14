@@ -32,7 +32,7 @@ mod fmt;
 pub struct Time(u16);
 
 impl Time {
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Creates a new `Time` with the given MS-DOS time.
     ///
     /// Returns [`None`] if the given MS-DOS time is not a valid MS-DOS time.
@@ -132,7 +132,7 @@ impl Time {
         self.0
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the hour of this `Time`.
     ///
     /// # Examples
@@ -150,7 +150,7 @@ impl Time {
             .expect("hour should be in the range of `u8`")
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the minute of this `Time`.
     ///
     /// # Examples
@@ -168,7 +168,7 @@ impl Time {
             .expect("minute should be in the range of `u8`")
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the second of this `Time`.
     ///
     /// # Examples

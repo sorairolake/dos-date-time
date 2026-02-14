@@ -30,7 +30,7 @@ use crate::error::{DateRangeError, DateRangeErrorKind};
 pub struct Date(u16);
 
 impl Date {
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Creates a new `Date` with the given MS-DOS date.
     ///
     /// Returns [`None`] if the given MS-DOS date is not a valid MS-DOS date.
@@ -72,7 +72,7 @@ impl Date {
         Self(date)
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Creates a new `Date` with the given [`time::Date`].
     ///
     /// # Errors
@@ -147,7 +147,7 @@ impl Date {
         1980 + (self.to_raw() >> 9)
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the month of this `Date`.
     ///
     /// # Examples
@@ -166,7 +166,7 @@ impl Date {
             .expect("month should be in the range of `Month`")
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the day of this `Date`.
     ///
     /// # Examples
