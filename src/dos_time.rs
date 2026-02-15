@@ -17,7 +17,10 @@ mod fmt;
 ///
 /// <div class="warning">
 ///
-/// The resolution of MS-DOS time is 2 seconds.
+/// It has the following peculiarities:
+///
+/// - It has a resolution of 2 seconds.
+/// - It does not support leap seconds.
 ///
 /// </div>
 ///
@@ -80,9 +83,8 @@ impl Time {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS time is 2 seconds. So this method rounds
-    /// towards zero, truncating any fractional part of the exact result of
-    /// dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `Time` cannot store.
     ///
     /// </div>
     ///
