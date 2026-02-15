@@ -192,9 +192,6 @@ impl Time {
 impl Default for Time {
     /// Returns the default value of "00:00:00".
     ///
-    /// Equivalent to [`Time::MIN`] except that it is not callable in const
-    /// contexts.
-    ///
     /// # Examples
     ///
     /// ```

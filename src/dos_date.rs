@@ -188,9 +188,6 @@ impl Date {
 impl Default for Date {
     /// Returns the default value of "1980-01-01".
     ///
-    /// Equivalent to [`Date::MIN`] except that it is not callable in const
-    /// contexts.
-    ///
     /// # Examples
     ///
     /// ```

@@ -239,9 +239,6 @@ impl DateTime {
 impl Default for DateTime {
     /// Returns the default value of "1980-01-01 00:00:00".
     ///
-    /// Equivalent to [`DateTime::MIN`] except that it is not callable in const
-    /// contexts.
-    ///
     /// # Examples
     ///
     /// ```
