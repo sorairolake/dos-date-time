@@ -11,6 +11,12 @@ use jiff::civil;
 
 use super::Time;
 
+impl From<Time> for u16 {
+    fn from(time: Time) -> Self {
+        time.to_raw()
+    }
+}
+
 impl From<Time> for time::Time {
     /// Converts a `Time` to a [`time::Time`].
     ///
@@ -193,6 +199,22 @@ mod tests {
     use time::macros::time;
 
     use super::*;
+
+    #[test]
+    fn from_time_to_u16() {
+        assert_eq!(u16::from(Time::MIN), u16::MIN);
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            u16::from(Time::new(0b1001_1011_0010_0000).unwrap()),
+            0b1001_1011_0010_0000
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            u16::from(Time::new(0b0101_0100_1100_1111).unwrap()),
+            0b0101_0100_1100_1111
+        );
+        assert_eq!(u16::from(Time::MAX), 0b1011_1111_0111_1101);
+    }
 
     #[test]
     fn from_time_to_time_time() {
