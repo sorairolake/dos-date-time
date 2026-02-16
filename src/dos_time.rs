@@ -36,9 +36,9 @@ pub struct Time(u16);
 
 impl Time {
     #[expect(clippy::missing_panics_doc)]
-    /// Creates a new `Time` with the given MS-DOS time.
+    /// Creates a new `Time` with the given underlying [`u16`] value.
     ///
-    /// Returns [`None`] if the given MS-DOS time is not a valid MS-DOS time.
+    /// Returns [`None`] if the given value is not a valid MS-DOS time.
     ///
     /// # Examples
     ///
@@ -69,11 +69,11 @@ impl Time {
         Some(time)
     }
 
-    /// Creates a new `Time` with the given MS-DOS time.
+    /// Creates a new `Time` with the given underlying [`u16`] value.
     ///
     /// # Safety
     ///
-    /// The given MS-DOS time must be a valid MS-DOS time.
+    /// The given value must be a valid MS-DOS time.
     #[must_use]
     pub const unsafe fn new_unchecked(time: u16) -> Self {
         Self(time)
@@ -119,7 +119,7 @@ impl Time {
         Self::new(self.to_raw()).is_some()
     }
 
-    /// Returns the MS-DOS time of this `Time` as the underlying [`u16`] value.
+    /// Returns this `Time` as the underlying [`u16`] value.
     ///
     /// # Examples
     ///

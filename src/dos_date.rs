@@ -31,9 +31,9 @@ pub struct Date(u16);
 
 impl Date {
     #[expect(clippy::missing_panics_doc)]
-    /// Creates a new `Date` with the given MS-DOS date.
+    /// Creates a new `Date` with the given underlying [`u16`] value.
     ///
-    /// Returns [`None`] if the given MS-DOS date is not a valid MS-DOS date.
+    /// Returns [`None`] if the given value is not a valid MS-DOS date.
     ///
     /// # Examples
     ///
@@ -62,11 +62,11 @@ impl Date {
         Self::from_date(date).ok()
     }
 
-    /// Creates a new `Date` with the given MS-DOS date.
+    /// Creates a new `Date` with the given underlying [`u16`] value.
     ///
     /// # Safety
     ///
-    /// The given MS-DOS date must be a valid MS-DOS date.
+    /// The given value must be a valid MS-DOS date.
     #[must_use]
     pub const unsafe fn new_unchecked(date: u16) -> Self {
         Self(date)
@@ -117,7 +117,7 @@ impl Date {
         Self::new(self.to_raw()).is_some()
     }
 
-    /// Returns the MS-DOS date of this `Date` as the underlying [`u16`] value.
+    /// Returns this `Date` as the underlying [`u16`] value.
     ///
     /// # Examples
     ///

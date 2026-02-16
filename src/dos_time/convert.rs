@@ -12,7 +12,7 @@ use jiff::civil;
 use super::Time;
 
 impl From<Time> for u16 {
-    /// Converts a `Time` to the MS-DOS time.
+    /// Converts a `Time` to the underlying [`u16`] value.
     ///
     /// # Examples
     ///

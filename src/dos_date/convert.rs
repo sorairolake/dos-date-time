@@ -13,7 +13,7 @@ use super::Date;
 use crate::error::DateRangeError;
 
 impl From<Date> for u16 {
-    /// Converts a `Date` to the MS-DOS date.
+    /// Converts a `Date` to the underlying [`u16`] value.
     ///
     /// # Examples
     ///
