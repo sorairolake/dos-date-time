@@ -13,16 +13,6 @@ use super::Date;
 use crate::error::DateRangeError;
 
 impl From<Date> for u16 {
-    /// Converts a `Date` to the underlying [`u16`] value.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Date;
-    /// #
-    /// assert_eq!(u16::from(Date::MIN), 0b0000_0000_0010_0001);
-    /// assert_eq!(u16::from(Date::MAX), 0b1111_1111_1001_1111);
-    /// ```
     fn from(date: Date) -> Self {
         date.to_raw()
     }

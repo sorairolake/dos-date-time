@@ -12,16 +12,6 @@ use jiff::civil;
 use super::Time;
 
 impl From<Time> for u16 {
-    /// Converts a `Time` to the underlying [`u16`] value.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use dos_date_time::Time;
-    /// #
-    /// assert_eq!(u16::from(Time::MIN), u16::MIN);
-    /// assert_eq!(u16::from(Time::MAX), 0b1011_1111_0111_1101);
-    /// ```
     fn from(time: Time) -> Self {
         time.to_raw()
     }
