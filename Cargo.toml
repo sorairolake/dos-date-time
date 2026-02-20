@@ -4,7 +4,7 @@
 
 [package]
 name = "dos-date-time"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2024"
 rust-version = "1.88.0"
 description = "An MS-DOS date and time library"
@@ -20,13 +20,13 @@ all-features = true
 
 [dependencies]
 chrono = { version = "0.4.43", default-features = false, optional = true }
-jiff = { version = "0.2.18", default-features = false, optional = true }
-time = { version = "0.3.46", default-features = false }
+jiff = { version = "0.2.20", default-features = false, optional = true }
+time = { version = "0.3.47", default-features = false }
 
 [dev-dependencies]
-anyhow = "1.0.100"
-clap = { version = "4.5.56", features = ["derive"] }
-time = { version = "0.3.46", features = ["formatting", "macros", "parsing"] }
+anyhow = "1.0.102"
+clap = { version = "4.5.60", features = ["derive"] }
+time = { version = "0.3.47", features = ["formatting", "macros", "parsing"] }
 
 [features]
 default = ["std"]

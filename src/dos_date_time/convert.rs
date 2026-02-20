@@ -94,9 +94,8 @@ impl TryFrom<PrimitiveDateTime> for DateTime {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS date and time is 2 seconds. So this method
-    /// rounds towards zero, truncating any fractional part of the exact result
-    /// of dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `DateTime` cannot store.
     ///
     /// </div>
     ///
@@ -137,9 +136,8 @@ impl TryFrom<NaiveDateTime> for DateTime {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS date and time is 2 seconds. So this method
-    /// rounds towards zero, truncating any fractional part of the exact result
-    /// of dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `DateTime` cannot store.
     ///
     /// </div>
     ///
@@ -181,9 +179,8 @@ impl TryFrom<civil::DateTime> for DateTime {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS date and time is 2 seconds. So this method
-    /// rounds towards zero, truncating any fractional part of the exact result
-    /// of dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `DateTime` cannot store.
     ///
     /// </div>
     ///

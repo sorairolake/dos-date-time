@@ -21,10 +21,7 @@
 //!
 //! use dos_date_time::{
 //!     DateTime,
-//!     time::{
-//!         PrimitiveDateTime,
-//!         macros::{date, datetime, time},
-//!     },
+//!     time::{PrimitiveDateTime, macros::datetime},
 //! };
 //!
 //! let dt = DateTime::MIN;
@@ -38,12 +35,6 @@
 //! assert_eq!(
 //!     (dt.date().to_raw(), dt.time().to_raw()),
 //!     (0b0010_1101_0111_1010, 0b1001_1011_0010_0000)
-//! );
-//!
-//! // The largest MS-DOS date and time.
-//! assert_eq!(
-//!     DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)),
-//!     Ok(DateTime::MAX)
 //! );
 //! ```
 //!
@@ -75,7 +66,7 @@
 //! [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 //! [RFC 3339 format]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
 
-#![doc(html_root_url = "https://docs.rs/dos-date-time/0.2.1/")]
+#![doc(html_root_url = "https://docs.rs/dos-date-time/0.2.2/")]
 #![no_std]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 // Lint levels of rustc.

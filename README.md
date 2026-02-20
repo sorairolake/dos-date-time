@@ -89,7 +89,6 @@ licensing information.
 [Rust]: https://www.rust-lang.org/
 [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
 [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
-[`time`]: https://crates.io/crates/time
 [`chrono`]: https://crates.io/crates/chrono
 [`jiff`]: https://crates.io/crates/jiff
 [CHANGELOG.adoc]: CHANGELOG.adoc

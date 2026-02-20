@@ -11,6 +11,12 @@ use jiff::civil;
 
 use super::Time;
 
+impl From<Time> for u16 {
+    fn from(time: Time) -> Self {
+        time.to_raw()
+    }
+}
+
 impl From<Time> for time::Time {
     /// Converts a `Time` to a [`time::Time`].
     ///
@@ -90,9 +96,8 @@ impl From<time::Time> for Time {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS time is 2 seconds. So this method rounds
-    /// towards zero, truncating any fractional part of the exact result of
-    /// dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `Time` cannot store.
     ///
     /// </div>
     ///
@@ -118,9 +123,8 @@ impl From<NaiveTime> for Time {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS time is 2 seconds. So this method rounds
-    /// towards zero, truncating any fractional part of the exact result of
-    /// dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `Time` cannot store.
     ///
     /// </div>
     ///
@@ -159,9 +163,8 @@ impl From<civil::Time> for Time {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS time is 2 seconds. So this method rounds
-    /// towards zero, truncating any fractional part of the exact result of
-    /// dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `Time` cannot store.
     ///
     /// </div>
     ///
@@ -196,6 +199,22 @@ mod tests {
     use time::macros::time;
 
     use super::*;
+
+    #[test]
+    fn from_time_to_u16() {
+        assert_eq!(u16::from(Time::MIN), u16::MIN);
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            u16::from(Time::new(0b1001_1011_0010_0000).unwrap()),
+            0b1001_1011_0010_0000
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            u16::from(Time::new(0b0101_0100_1100_1111).unwrap()),
+            0b0101_0100_1100_1111
+        );
+        assert_eq!(u16::from(Time::MAX), 0b1011_1111_0111_1101);
+    }
 
     #[test]
     fn from_time_to_time_time() {

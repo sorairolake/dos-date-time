@@ -130,7 +130,7 @@ jobs:
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           components: clippy
       - name: Cache build artifacts
         uses: Swatinem/rust-cache@v2.8.2
@@ -182,6 +182,6 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - name: Run formatter in check mode
         run: npx prettier -c "**.{md,yaml,yml}"

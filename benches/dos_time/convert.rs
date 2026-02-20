@@ -10,6 +10,11 @@ use jiff::civil;
 use test::Bencher;
 
 #[bench]
+fn from_time_to_u16(b: &mut Bencher) {
+    b.iter(|| u16::from(Time::MIN));
+}
+
+#[bench]
 fn from_time_to_time_time(b: &mut Bencher) {
     b.iter(|| time::Time::from(Time::MIN));
 }

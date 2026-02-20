@@ -24,7 +24,12 @@ use crate::{Date, Time, error::DateTimeRangeError};
 ///
 /// <div class="warning">
 ///
-/// The resolution of MS-DOS date and time is 2 seconds.
+/// They have the following peculiarities:
+///
+/// - They have a resolution of 2 seconds.
+/// - They do not support leap seconds.
+/// - They represent the local date and time, and have no notion of the time
+///   zone.
 ///
 /// </div>
 ///
@@ -63,9 +68,8 @@ impl DateTime {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS date and time is 2 seconds. So this method
-    /// rounds towards zero, truncating any fractional part of the exact result
-    /// of dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `DateTime` cannot store.
     ///
     /// </div>
     ///
@@ -234,9 +238,6 @@ impl DateTime {
 
 impl Default for DateTime {
     /// Returns the default value of "1980-01-01 00:00:00".
-    ///
-    /// Equivalent to [`DateTime::MIN`] except that it is not callable in const
-    /// contexts.
     ///
     /// # Examples
     ///

@@ -12,6 +12,12 @@ use jiff::civil;
 use super::Date;
 use crate::error::DateRangeError;
 
+impl From<Date> for u16 {
+    fn from(date: Date) -> Self {
+        date.to_raw()
+    }
+}
+
 impl From<Date> for time::Date {
     /// Converts a `Date` to a [`time::Date`].
     ///
@@ -205,6 +211,22 @@ mod tests {
 
     use super::*;
     use crate::error::DateRangeErrorKind;
+
+    #[test]
+    fn from_date_to_u16() {
+        assert_eq!(u16::from(Date::MIN), 0b0000_0000_0010_0001);
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            u16::from(Date::new(0b0010_1101_0111_1010).unwrap()),
+            0b0010_1101_0111_1010
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            u16::from(Date::new(0b0100_1101_0111_0001).unwrap()),
+            0b0100_1101_0111_0001
+        );
+        assert_eq!(u16::from(Date::MAX), 0b1111_1111_1001_1111);
+    }
 
     #[test]
     fn from_date_to_time_date() {

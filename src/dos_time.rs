@@ -17,7 +17,10 @@ mod fmt;
 ///
 /// <div class="warning">
 ///
-/// The resolution of MS-DOS time is 2 seconds.
+/// It has the following peculiarities:
+///
+/// - It has a resolution of 2 seconds.
+/// - It does not support leap seconds.
 ///
 /// </div>
 ///
@@ -32,10 +35,10 @@ mod fmt;
 pub struct Time(u16);
 
 impl Time {
-    #[allow(clippy::missing_panics_doc)]
-    /// Creates a new `Time` with the given MS-DOS time.
+    #[expect(clippy::missing_panics_doc)]
+    /// Creates a new `Time` with the given underlying [`u16`] value.
     ///
-    /// Returns [`None`] if the given MS-DOS time is not a valid MS-DOS time.
+    /// Returns [`None`] if the given value is not a valid MS-DOS time.
     ///
     /// # Examples
     ///
@@ -66,11 +69,11 @@ impl Time {
         Some(time)
     }
 
-    /// Creates a new `Time` with the given MS-DOS time.
+    /// Creates a new `Time` with the given underlying [`u16`] value.
     ///
     /// # Safety
     ///
-    /// The given MS-DOS time must be a valid MS-DOS time.
+    /// The given value must be a valid MS-DOS time.
     #[must_use]
     pub const unsafe fn new_unchecked(time: u16) -> Self {
         Self(time)
@@ -80,9 +83,8 @@ impl Time {
     ///
     /// <div class="warning">
     ///
-    /// The resolution of MS-DOS time is 2 seconds. So this method rounds
-    /// towards zero, truncating any fractional part of the exact result of
-    /// dividing seconds by 2.
+    /// This method may round towards zero, truncating more precise times that a
+    /// `Time` cannot store.
     ///
     /// </div>
     ///
@@ -117,7 +119,7 @@ impl Time {
         Self::new(self.to_raw()).is_some()
     }
 
-    /// Returns the MS-DOS time of this `Time` as the underlying [`u16`] value.
+    /// Returns this `Time` as the underlying [`u16`] value.
     ///
     /// # Examples
     ///
@@ -132,7 +134,7 @@ impl Time {
         self.0
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the hour of this `Time`.
     ///
     /// # Examples
@@ -150,7 +152,7 @@ impl Time {
             .expect("hour should be in the range of `u8`")
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the minute of this `Time`.
     ///
     /// # Examples
@@ -168,7 +170,7 @@ impl Time {
             .expect("minute should be in the range of `u8`")
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the second of this `Time`.
     ///
     /// # Examples
@@ -189,9 +191,6 @@ impl Time {
 
 impl Default for Time {
     /// Returns the default value of "00:00:00".
-    ///
-    /// Equivalent to [`Time::MIN`] except that it is not callable in const
-    /// contexts.
     ///
     /// # Examples
     ///

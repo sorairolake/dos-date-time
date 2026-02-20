@@ -30,10 +30,10 @@ use crate::error::{DateRangeError, DateRangeErrorKind};
 pub struct Date(u16);
 
 impl Date {
-    #[allow(clippy::missing_panics_doc)]
-    /// Creates a new `Date` with the given MS-DOS date.
+    #[expect(clippy::missing_panics_doc)]
+    /// Creates a new `Date` with the given underlying [`u16`] value.
     ///
-    /// Returns [`None`] if the given MS-DOS date is not a valid MS-DOS date.
+    /// Returns [`None`] if the given value is not a valid MS-DOS date.
     ///
     /// # Examples
     ///
@@ -62,17 +62,17 @@ impl Date {
         Self::from_date(date).ok()
     }
 
-    /// Creates a new `Date` with the given MS-DOS date.
+    /// Creates a new `Date` with the given underlying [`u16`] value.
     ///
     /// # Safety
     ///
-    /// The given MS-DOS date must be a valid MS-DOS date.
+    /// The given value must be a valid MS-DOS date.
     #[must_use]
     pub const unsafe fn new_unchecked(date: u16) -> Self {
         Self(date)
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Creates a new `Date` with the given [`time::Date`].
     ///
     /// # Errors
@@ -117,7 +117,7 @@ impl Date {
         Self::new(self.to_raw()).is_some()
     }
 
-    /// Returns the MS-DOS date of this `Date` as the underlying [`u16`] value.
+    /// Returns this `Date` as the underlying [`u16`] value.
     ///
     /// # Examples
     ///
@@ -147,7 +147,7 @@ impl Date {
         1980 + (self.to_raw() >> 9)
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the month of this `Date`.
     ///
     /// # Examples
@@ -166,7 +166,7 @@ impl Date {
             .expect("month should be in the range of `Month`")
     }
 
-    #[allow(clippy::missing_panics_doc)]
+    #[expect(clippy::missing_panics_doc)]
     /// Gets the day of this `Date`.
     ///
     /// # Examples
@@ -187,9 +187,6 @@ impl Date {
 
 impl Default for Date {
     /// Returns the default value of "1980-01-01".
-    ///
-    /// Equivalent to [`Date::MIN`] except that it is not callable in const
-    /// contexts.
     ///
     /// # Examples
     ///
