@@ -65,8 +65,7 @@ impl Time {
                 .expect("second should be in the range of `u8`"),
         );
         let time = time::Time::from_hms(hour, minute, second).ok()?;
-        let time = Self::from_time(time);
-        Some(time)
+        Some(Self::from_time(time))
     }
 
     /// Creates a new `Time` with the given underlying [`u16`] value.

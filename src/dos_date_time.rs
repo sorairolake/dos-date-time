@@ -104,8 +104,7 @@ impl DateTime {
     /// ```
     pub fn from_date_time(date: time::Date, time: time::Time) -> Result<Self, DateTimeRangeError> {
         let (date, time) = (date.try_into()?, time.into());
-        let dt = Self::new(date, time);
-        Ok(dt)
+        Ok(Self::new(date, time))
     }
 
     /// Returns [`true`] if `self` is valid MS-DOS date and time, and [`false`]

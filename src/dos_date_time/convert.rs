@@ -166,8 +166,7 @@ impl TryFrom<NaiveDateTime> for DateTime {
     /// ```
     fn try_from(dt: NaiveDateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date().try_into()?, dt.time().into());
-        let dt = Self::new(date, time);
-        Ok(dt)
+        Ok(Self::new(date, time))
     }
 }
 
@@ -209,8 +208,7 @@ impl TryFrom<civil::DateTime> for DateTime {
     /// ```
     fn try_from(dt: civil::DateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date().try_into()?, dt.time().into());
-        let dt = Self::new(date, time);
-        Ok(dt)
+        Ok(Self::new(date, time))
     }
 }
 
