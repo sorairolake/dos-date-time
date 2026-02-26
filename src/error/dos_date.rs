@@ -29,7 +29,7 @@ impl DateRangeError {
     /// assert_eq!(err.kind(), DateRangeErrorKind::Overflow);
     /// ```
     #[must_use]
-    pub const fn kind(&self) -> DateRangeErrorKind {
+    pub const fn kind(self) -> DateRangeErrorKind {
         self.0
     }
 }
