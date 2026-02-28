@@ -104,8 +104,7 @@ impl Date {
                 );
                 let date = (year << 9) | (month << 5) | day;
                 // SAFETY: `date` is a valid as the MS-DOS date.
-                let date = unsafe { Self::new_unchecked(date) };
-                Ok(date)
+                Ok(unsafe { Self::new_unchecked(date) })
             }
         }
     }
