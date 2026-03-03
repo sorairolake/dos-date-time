@@ -17,6 +17,7 @@ impl From<Time> for u16 {
     }
 }
 
+#[expect(clippy::fallible_impl_from)]
 impl From<Time> for time::Time {
     /// Converts a `Time` to a [`time::Time`].
     ///
@@ -33,11 +34,12 @@ impl From<Time> for time::Time {
     /// ```
     fn from(time: Time) -> Self {
         let (hour, minute, second) = (time.hour(), time.minute(), time.second());
-        Self::from_hms(hour, minute, second).expect("time should be in the range of `time::Time`")
+        Self::from_hms(hour, minute, second).unwrap()
     }
 }
 
 #[cfg(feature = "chrono")]
+#[expect(clippy::fallible_impl_from)]
 impl From<Time> for NaiveTime {
     /// Converts a `Time` to a [`NaiveTime`].
     ///
@@ -58,12 +60,12 @@ impl From<Time> for NaiveTime {
             time.minute().into(),
             time.second().into(),
         );
-        Self::from_hms_opt(hour, minute, second)
-            .expect("time should be in the range of `NaiveTime`")
+        Self::from_hms_opt(hour, minute, second).unwrap()
     }
 }
 
 #[cfg(feature = "jiff")]
+#[expect(clippy::fallible_impl_from)]
 impl From<Time> for civil::Time {
     /// Converts a `Time` to a [`civil::Time`].
     ///
@@ -77,15 +79,9 @@ impl From<Time> for civil::Time {
     /// ```
     fn from(time: Time) -> Self {
         let (hour, minute, second) = (
-            time.hour()
-                .try_into()
-                .expect("hour should be in the range of `i8`"),
-            time.minute()
-                .try_into()
-                .expect("minute should be in the range of `i8`"),
-            time.second()
-                .try_into()
-                .expect("second should be in the range of `i8`"),
+            time.hour().try_into().unwrap(),
+            time.minute().try_into().unwrap(),
+            time.second().try_into().unwrap(),
         );
         civil::time(hour, minute, second, i32::default())
     }
@@ -118,6 +114,7 @@ impl From<time::Time> for Time {
 }
 
 #[cfg(feature = "chrono")]
+#[expect(clippy::fallible_impl_from)]
 impl From<NaiveTime> for Time {
     /// Converts a [`NaiveTime`] to a `Time`.
     ///
@@ -141,23 +138,17 @@ impl From<NaiveTime> for Time {
     /// ```
     fn from(time: NaiveTime) -> Self {
         let (hour, minute, second) = (
-            time.hour()
-                .try_into()
-                .expect("hour should be in the range of `u8`"),
-            time.minute()
-                .try_into()
-                .expect("minute should be in the range of `u8`"),
-            time.second()
-                .try_into()
-                .expect("second should be in the range of `u8`"),
+            time.hour().try_into().unwrap(),
+            time.minute().try_into().unwrap(),
+            time.second().try_into().unwrap(),
         );
-        let time = time::Time::from_hms(hour, minute, second)
-            .expect("time should be in the range of `time::Time`");
+        let time = time::Time::from_hms(hour, minute, second).unwrap();
         Self::from_time(time)
     }
 }
 
 #[cfg(feature = "jiff")]
+#[expect(clippy::fallible_impl_from)]
 impl From<civil::Time> for Time {
     /// Converts a [`civil::Time`] to a `Time`.
     ///
@@ -178,18 +169,11 @@ impl From<civil::Time> for Time {
     /// ```
     fn from(time: civil::Time) -> Self {
         let (hour, minute, second) = (
-            time.hour()
-                .try_into()
-                .expect("hour should be in the range of `u8`"),
-            time.minute()
-                .try_into()
-                .expect("minute should be in the range of `u8`"),
-            time.second()
-                .try_into()
-                .expect("second should be in the range of `u8`"),
+            time.hour().try_into().unwrap(),
+            time.minute().try_into().unwrap(),
+            time.second().try_into().unwrap(),
         );
-        let time = time::Time::from_hms(hour, minute, second)
-            .expect("time should be in the range of `time::Time`");
+        let time = time::Time::from_hms(hour, minute, second).unwrap();
         Self::from_time(time)
     }
 }

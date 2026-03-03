@@ -50,13 +50,8 @@ impl Date {
     pub fn new(date: u16) -> Option<Self> {
         let (year, month, day) = (
             (1980 + (date >> 9)).into(),
-            u8::try_from((date >> 5) & 0x0F)
-                .expect("month should be in the range of `u8`")
-                .try_into()
-                .ok()?,
-            (date & 0x1F)
-                .try_into()
-                .expect("day should be in the range of `u8`"),
+            u8::try_from((date >> 5) & 0x0F).unwrap().try_into().ok()?,
+            (date & 0x1F).try_into().unwrap(),
         );
         let date = time::Date::from_calendar_date(year, month, day).ok()?;
         Self::from_date(date).ok()
@@ -98,7 +93,7 @@ impl Date {
             2108.. => Err(DateRangeErrorKind::Overflow.into()),
             year => {
                 let (year, month, day) = (
-                    u16::try_from(year - 1980).expect("year should be in the range of `u16`"),
+                    u16::try_from(year - 1980).unwrap(),
                     u16::from(u8::from(date.month())),
                     u16::from(date.day()),
                 );
@@ -160,9 +155,9 @@ impl Date {
     #[must_use]
     pub fn month(self) -> Month {
         u8::try_from((self.to_raw() >> 5) & 0x0F)
-            .expect("month should be in the range of `u8`")
+            .unwrap()
             .try_into()
-            .expect("month should be in the range of `Month`")
+            .unwrap()
     }
 
     #[expect(clippy::missing_panics_doc)]
@@ -178,9 +173,7 @@ impl Date {
     /// ```
     #[must_use]
     pub fn day(self) -> u8 {
-        (self.to_raw() & 0x1F)
-            .try_into()
-            .expect("day should be in the range of `u8`")
+        (self.to_raw() & 0x1F).try_into().unwrap()
     }
 }
 

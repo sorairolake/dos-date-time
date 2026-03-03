@@ -18,6 +18,7 @@ impl From<Date> for u16 {
     }
 }
 
+#[expect(clippy::fallible_impl_from)]
 impl From<Date> for time::Date {
     /// Converts a `Date` to a [`time::Date`].
     ///
@@ -31,12 +32,12 @@ impl From<Date> for time::Date {
     /// ```
     fn from(date: Date) -> Self {
         let (year, month, day) = (date.year().into(), date.month(), date.day());
-        Self::from_calendar_date(year, month, day)
-            .expect("date should be in the range of `time::Date`")
+        Self::from_calendar_date(year, month, day).unwrap()
     }
 }
 
 #[cfg(feature = "chrono")]
+#[expect(clippy::fallible_impl_from)]
 impl From<Date> for NaiveDate {
     /// Converts a `Date` to a [`NaiveDate`].
     ///
@@ -60,11 +61,12 @@ impl From<Date> for NaiveDate {
             u8::from(date.month()).into(),
             date.day().into(),
         );
-        Self::from_ymd_opt(year, month, day).expect("date should be in the range of `NaiveDate`")
+        Self::from_ymd_opt(year, month, day).unwrap()
     }
 }
 
 #[cfg(feature = "jiff")]
+#[expect(clippy::fallible_impl_from)]
 impl From<Date> for civil::Date {
     /// Converts a `Date` to a [`civil::Date`].
     ///
@@ -78,15 +80,9 @@ impl From<Date> for civil::Date {
     /// ```
     fn from(date: Date) -> Self {
         let (year, month, day) = (
-            date.year()
-                .try_into()
-                .expect("year should be in the range of `i16`"),
-            u8::from(date.month())
-                .try_into()
-                .expect("month should be in the range of `i8`"),
-            date.day()
-                .try_into()
-                .expect("day should be in the range of `i8`"),
+            date.year().try_into().unwrap(),
+            u8::from(date.month()).try_into().unwrap(),
+            date.day().try_into().unwrap(),
         );
         civil::date(year, month, day)
     }
@@ -151,16 +147,10 @@ impl TryFrom<NaiveDate> for Date {
     fn try_from(date: NaiveDate) -> Result<Self, Self::Error> {
         let (year, month, day) = (
             date.year(),
-            u8::try_from(date.month())
-                .expect("month should be in the range of `u8`")
-                .try_into()
-                .expect("month should be in the range of `Month`"),
-            date.day()
-                .try_into()
-                .expect("day should be in the range of `u8`"),
+            u8::try_from(date.month()).unwrap().try_into().unwrap(),
+            date.day().try_into().unwrap(),
         );
-        let date = time::Date::from_calendar_date(year, month, day)
-            .expect("date should be in the range of `time::Date`");
+        let date = time::Date::from_calendar_date(year, month, day).unwrap();
         Self::from_date(date)
     }
 }
@@ -191,16 +181,10 @@ impl TryFrom<civil::Date> for Date {
     fn try_from(date: civil::Date) -> Result<Self, Self::Error> {
         let (year, month, day) = (
             date.year().into(),
-            u8::try_from(date.month())
-                .expect("month should be in the range of `u8`")
-                .try_into()
-                .expect("month should be in the range of `Month`"),
-            date.day()
-                .try_into()
-                .expect("day should be in the range of `u8`"),
+            u8::try_from(date.month()).unwrap().try_into().unwrap(),
+            date.day().try_into().unwrap(),
         );
-        let date = time::Date::from_calendar_date(year, month, day)
-            .expect("date should be in the range of `time::Date`");
+        let date = time::Date::from_calendar_date(year, month, day).unwrap();
         Self::from_date(date)
     }
 }
