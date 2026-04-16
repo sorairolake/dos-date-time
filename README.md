@@ -49,6 +49,10 @@ This supports `no_std` mode. Disables the `default` feature to enable this.
 
 See the [documentation][docs-url] for more details.
 
+## Examples
+
+Please see the [examples] directory for examples of using this library.
+
 ## Minimum supported Rust version
 
 The minimum supported Rust version (MSRV) of this library is v1.88.0.
@@ -91,6 +95,7 @@ licensing information.
 [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 [`chrono`]: https://crates.io/crates/chrono
 [`jiff`]: https://crates.io/crates/jiff
+[examples]: examples
 [CHANGELOG.adoc]: CHANGELOG.adoc
 [CONTRIBUTING.adoc]: CONTRIBUTING.adoc
 [AUTHORS.adoc]: AUTHORS.adoc
