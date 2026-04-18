@@ -9,7 +9,7 @@ use super::Date;
 impl Date {
     /// The smallest value that can be represented by the MS-DOS date.
     ///
-    /// This is "1980-01-01".
+    /// This is `1980-01-01`.
     ///
     /// # Examples
     ///
@@ -23,7 +23,7 @@ impl Date {
 
     /// The largest value that can be represented by the MS-DOS date.
     ///
-    /// This is "2107-12-31".
+    /// This is `2107-12-31`.
     ///
     /// # Examples
     ///

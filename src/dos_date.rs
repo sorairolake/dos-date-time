@@ -178,7 +178,7 @@ impl Date {
 }
 
 impl Default for Date {
-    /// Returns the default value of "1980-01-01".
+    /// Returns the default value of `1980-01-01`.
     ///
     /// # Examples
     ///

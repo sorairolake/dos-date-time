@@ -82,14 +82,11 @@ impl DateTime {
     /// ```
     /// # use dos_date_time::{
     /// #     DateTime,
-    /// #     time::{
-    /// #         Time,
-    /// #         macros::{date, time},
-    /// #     },
+    /// #     time::macros::{date, time},
     /// # };
     /// #
     /// assert_eq!(
-    ///     DateTime::from_date_time(date!(1980-01-01), Time::MIDNIGHT),
+    ///     DateTime::from_date_time(date!(1980-01-01), time!(00:00:00)),
     ///     Ok(DateTime::MIN)
     /// );
     /// assert_eq!(
@@ -100,7 +97,7 @@ impl DateTime {
     /// // Before `1980-01-01 00:00:00`.
     /// assert!(DateTime::from_date_time(date!(1979-12-31), time!(23:59:59)).is_err());
     /// // After `2107-12-31 23:59:59`.
-    /// assert!(DateTime::from_date_time(date!(2108-01-01), Time::MIDNIGHT).is_err());
+    /// assert!(DateTime::from_date_time(date!(2108-01-01), time!(00:00:00)).is_err());
     /// ```
     pub fn from_date_time(date: time::Date, time: time::Time) -> Result<Self, DateTimeRangeError> {
         let (date, time) = (date.try_into()?, time.into());
@@ -236,7 +233,7 @@ impl DateTime {
 }
 
 impl Default for DateTime {
-    /// Returns the default value of "1980-01-01 00:00:00".
+    /// Returns the default value of `1980-01-01 00:00:00`.
     ///
     /// # Examples
     ///

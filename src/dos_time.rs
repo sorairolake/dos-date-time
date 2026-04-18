@@ -45,7 +45,7 @@ impl Time {
     /// ```
     /// # use dos_date_time::Time;
     /// #
-    /// assert_eq!(Time::new(u16::MIN), Some(Time::MIN));
+    /// assert_eq!(Time::new(0b0000_0000_0000_0000), Some(Time::MIN));
     /// assert_eq!(Time::new(0b1011_1111_0111_1101), Some(Time::MAX));
     ///
     /// // The DoubleSeconds field is 30.
@@ -84,12 +84,9 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{
-    /// #     Time,
-    /// #     time::{self, macros::time},
-    /// # };
+    /// # use dos_date_time::{Time, time::macros::time};
     /// #
-    /// assert_eq!(Time::from_time(time::Time::MIDNIGHT), Time::MIN);
+    /// assert_eq!(Time::from_time(time!(00:00:00)), Time::MIN);
     /// assert_eq!(Time::from_time(time!(23:59:58)), Time::MAX);
     /// ```
     #[must_use]
@@ -119,7 +116,7 @@ impl Time {
     /// ```
     /// # use dos_date_time::Time;
     /// #
-    /// assert_eq!(Time::MIN.to_raw(), u16::MIN);
+    /// assert_eq!(Time::MIN.to_raw(), 0b0000_0000_0000_0000);
     /// assert_eq!(Time::MAX.to_raw(), 0b1011_1111_0111_1101);
     /// ```
     #[must_use]
@@ -177,7 +174,7 @@ impl Time {
 }
 
 impl Default for Time {
-    /// Returns the default value of "00:00:00".
+    /// Returns the default value of `00:00:00`.
     ///
     /// # Examples
     ///

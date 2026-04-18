@@ -40,7 +40,7 @@ fn try_from_time_date_to_date(b: &mut Bencher) {
 #[cfg(feature = "chrono")]
 #[bench]
 fn try_from_chrono_naive_date_to_date(b: &mut Bencher) {
-    let date = "1980-01-01".parse::<NaiveDate>().unwrap();
+    let date = NaiveDate::from_ymd_opt(1980, 1, 1).unwrap();
     b.iter(|| Date::try_from(date).unwrap());
 }
 

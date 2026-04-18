@@ -53,12 +53,12 @@ impl From<DateRangeErrorKind> for DateRangeError {
 pub enum DateRangeErrorKind {
     /// Value was negative.
     ///
-    /// This means the MS-DOS date was before "1980-01-01".
+    /// This means the MS-DOS date was before `1980-01-01`.
     Negative,
 
     /// Value was too big to be represented as [`Date`](crate::Date).
     ///
-    /// This means the MS-DOS date was after "2107-12-31".
+    /// This means the MS-DOS date was after `2107-12-31`.
     Overflow,
 }
 

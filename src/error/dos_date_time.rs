@@ -26,16 +26,13 @@ impl DateTimeRangeError {
     /// # use dos_date_time::{
     /// #     DateTime,
     /// #     error::DateTimeRangeErrorKind,
-    /// #     time::{
-    /// #         Time,
-    /// #         macros::{date, time},
-    /// #     },
+    /// #     time::macros::{date, time},
     /// # };
     /// #
     /// let err = DateTime::from_date_time(date!(1979-12-31), time!(23:59:59)).unwrap_err();
     /// assert_eq!(err.kind(), DateTimeRangeErrorKind::Negative);
     ///
-    /// let err = DateTime::from_date_time(date!(2108-01-01), Time::MIDNIGHT).unwrap_err();
+    /// let err = DateTime::from_date_time(date!(2108-01-01), time!(00:00:00)).unwrap_err();
     /// assert_eq!(err.kind(), DateTimeRangeErrorKind::Overflow);
     /// ```
     #[must_use]
@@ -72,12 +69,12 @@ impl From<DateRangeError> for DateTimeRangeError {
 pub enum DateTimeRangeErrorKind {
     /// Value was negative.
     ///
-    /// This means MS-DOS date and time were before "1980-01-01 00:00:00".
+    /// This means MS-DOS date and time were before `1980-01-01 00:00:00`.
     Negative,
 
     /// Value was too big to be represented as [`DateTime`](crate::DateTime).
     ///
-    /// This means MS-DOS date and time were after "2107-12-31 23:59:58".
+    /// This means MS-DOS date and time were after `2107-12-31 23:59:58`.
     Overflow,
 }
 

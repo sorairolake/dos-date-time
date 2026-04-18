@@ -50,11 +50,11 @@ impl From<DateTime> for NaiveDateTime {
     /// #
     /// assert_eq!(
     ///     NaiveDateTime::from(DateTime::MIN),
-    ///     "1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()
+    ///     "1980-01-01T00:00:00".parse().unwrap()
     /// );
     /// assert_eq!(
     ///     NaiveDateTime::from(DateTime::MAX),
-    ///     "2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()
+    ///     "2107-12-31T23:59:58".parse().unwrap()
     /// );
     /// ```
     fn from(dt: DateTime) -> Self {
@@ -74,11 +74,11 @@ impl From<DateTime> for civil::DateTime {
     /// #
     /// assert_eq!(
     ///     civil::DateTime::from(DateTime::MIN),
-    ///     civil::date(1980, 1, 1).at(0, 0, 0, 0)
+    ///     "1980-01-01T00:00:00".parse().unwrap()
     /// );
     /// assert_eq!(
     ///     civil::DateTime::from(DateTime::MAX),
-    ///     civil::date(2107, 12, 31).at(23, 59, 58, 0)
+    ///     "2107-12-31T23:59:58".parse().unwrap()
     /// );
     /// ```
     fn from(dt: DateTime) -> Self {
@@ -150,19 +150,17 @@ impl TryFrom<NaiveDateTime> for DateTime {
     /// ```
     /// # use dos_date_time::{DateTime, chrono::NaiveDateTime};
     /// #
-    /// assert_eq!(
-    ///     DateTime::try_from("1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()),
-    ///     Ok(DateTime::MIN)
-    /// );
-    /// assert_eq!(
-    ///     DateTime::try_from("2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()),
-    ///     Ok(DateTime::MAX)
-    /// );
+    /// let dt: NaiveDateTime = "1980-01-01T00:00:00".parse().unwrap();
+    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MIN));
+    /// let dt: NaiveDateTime = "2107-12-31T23:59:58".parse().unwrap();
+    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MAX));
     ///
     /// // Before `1980-01-01 00:00:00`.
-    /// assert!(DateTime::try_from("1979-12-31T23:59:59".parse::<NaiveDateTime>().unwrap()).is_err());
+    /// let dt: NaiveDateTime = "1979-12-31T23:59:59".parse().unwrap();
+    /// assert!(DateTime::try_from(dt).is_err());
     /// // After `2107-12-31 23:59:59`.
-    /// assert!(DateTime::try_from("2108-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()).is_err());
+    /// let dt: NaiveDateTime = "2108-01-01T00:00:00".parse().unwrap();
+    /// assert!(DateTime::try_from(dt).is_err());
     /// ```
     fn try_from(dt: NaiveDateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date().try_into()?, dt.time().into());
@@ -192,19 +190,17 @@ impl TryFrom<civil::DateTime> for DateTime {
     /// ```
     /// # use dos_date_time::{DateTime, jiff::civil};
     /// #
-    /// assert_eq!(
-    ///     DateTime::try_from(civil::date(1980, 1, 1).at(0, 0, 0, 0)),
-    ///     Ok(DateTime::MIN)
-    /// );
-    /// assert_eq!(
-    ///     DateTime::try_from(civil::date(2107, 12, 31).at(23, 59, 58, 0)),
-    ///     Ok(DateTime::MAX)
-    /// );
+    /// let dt: civil::DateTime = "1980-01-01T00:00:00".parse().unwrap();
+    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MIN));
+    /// let dt: civil::DateTime = "2107-12-31T23:59:58".parse().unwrap();
+    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MAX));
     ///
     /// // Before `1980-01-01 00:00:00`.
-    /// assert!(DateTime::try_from(civil::date(1979, 12, 31).at(23, 59, 59, 0)).is_err());
+    /// let dt: civil::DateTime = "1979-12-31T23:59:59".parse().unwrap();
+    /// assert!(DateTime::try_from(dt).is_err());
     /// // After `2107-12-31 23:59:59`.
-    /// assert!(DateTime::try_from(civil::date(2108, 1, 1).at(0, 0, 0, 0)).is_err());
+    /// let dt: civil::DateTime = "2108-01-01T00:00:00".parse().unwrap();
+    /// assert!(DateTime::try_from(dt).is_err());
     /// ```
     fn try_from(dt: civil::DateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date().try_into()?, dt.time().into());
@@ -214,6 +210,8 @@ impl TryFrom<civil::DateTime> for DateTime {
 
 #[cfg(test)]
 mod tests {
+    #[cfg(feature = "chrono")]
+    use chrono::{NaiveDate, NaiveTime};
     use time::macros::datetime;
 
     use super::*;
@@ -252,7 +250,9 @@ mod tests {
     fn from_date_time_to_chrono_naive_date_time() {
         assert_eq!(
             NaiveDateTime::from(DateTime::MIN),
-            "1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()
+            NaiveDate::from_ymd_opt(1980, 1, 1)
+                .unwrap()
+                .and_time(NaiveTime::MIN)
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
@@ -260,7 +260,10 @@ mod tests {
                 Date::new(0b0010_1101_0111_1010).unwrap(),
                 Time::new(0b1001_1011_0010_0000).unwrap()
             )),
-            "2002-11-26T19:25:00".parse::<NaiveDateTime>().unwrap()
+            NaiveDate::from_ymd_opt(2002, 11, 26)
+                .unwrap()
+                .and_hms_opt(19, 25, 0)
+                .unwrap()
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
@@ -268,11 +271,17 @@ mod tests {
                 Date::new(0b0100_1101_0111_0001).unwrap(),
                 Time::new(0b0101_0100_1100_1111).unwrap()
             )),
-            "2018-11-17T10:38:30".parse::<NaiveDateTime>().unwrap()
+            NaiveDate::from_ymd_opt(2018, 11, 17)
+                .unwrap()
+                .and_hms_opt(10, 38, 30)
+                .unwrap()
         );
         assert_eq!(
             NaiveDateTime::from(DateTime::MAX),
-            "2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()
+            NaiveDate::from_ymd_opt(2107, 12, 31)
+                .unwrap()
+                .and_hms_opt(23, 59, 58)
+                .unwrap()
         );
     }
 
@@ -365,13 +374,23 @@ mod tests {
     #[test]
     fn try_from_chrono_naive_date_time_to_date_time_before_dos_date_time_epoch() {
         assert_eq!(
-            DateTime::try_from("1979-12-31T23:59:58".parse::<NaiveDateTime>().unwrap())
-                .unwrap_err(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(1979, 12, 31)
+                    .unwrap()
+                    .and_hms_opt(23, 59, 58)
+                    .unwrap()
+            )
+            .unwrap_err(),
             DateTimeRangeErrorKind::Negative.into()
         );
         assert_eq!(
-            DateTime::try_from("1979-12-31T23:59:59".parse::<NaiveDateTime>().unwrap())
-                .unwrap_err(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(1979, 12, 31)
+                    .unwrap()
+                    .and_hms_opt(23, 59, 59)
+                    .unwrap()
+            )
+            .unwrap_err(),
             DateTimeRangeErrorKind::Negative.into()
         );
     }
@@ -380,16 +399,33 @@ mod tests {
     #[test]
     fn try_from_chrono_naive_date_time_to_date_time() {
         assert_eq!(
-            DateTime::try_from("1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()).unwrap(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(1980, 1, 1)
+                    .unwrap()
+                    .and_time(NaiveTime::MIN)
+            )
+            .unwrap(),
             DateTime::MIN
         );
         assert_eq!(
-            DateTime::try_from("1980-01-01T00:00:01".parse::<NaiveDateTime>().unwrap()).unwrap(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(1980, 1, 1)
+                    .unwrap()
+                    .and_hms_opt(0, 0, 1)
+                    .unwrap()
+            )
+            .unwrap(),
             DateTime::MIN
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
-            DateTime::try_from("2002-11-26T19:25:00".parse::<NaiveDateTime>().unwrap()).unwrap(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(2002, 11, 26)
+                    .unwrap()
+                    .and_hms_opt(19, 25, 0)
+                    .unwrap()
+            )
+            .unwrap(),
             DateTime::new(
                 Date::new(0b0010_1101_0111_1010).unwrap(),
                 Time::new(0b1001_1011_0010_0000).unwrap()
@@ -397,18 +433,36 @@ mod tests {
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
-            DateTime::try_from("2018-11-17T10:38:30".parse::<NaiveDateTime>().unwrap()).unwrap(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(2018, 11, 17)
+                    .unwrap()
+                    .and_hms_opt(10, 38, 30)
+                    .unwrap()
+            )
+            .unwrap(),
             DateTime::new(
                 Date::new(0b0100_1101_0111_0001).unwrap(),
                 Time::new(0b0101_0100_1100_1111).unwrap()
             )
         );
         assert_eq!(
-            DateTime::try_from("2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()).unwrap(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(2107, 12, 31)
+                    .unwrap()
+                    .and_hms_opt(23, 59, 58)
+                    .unwrap()
+            )
+            .unwrap(),
             DateTime::MAX
         );
         assert_eq!(
-            DateTime::try_from("2107-12-31T23:59:59".parse::<NaiveDateTime>().unwrap()).unwrap(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(2107, 12, 31)
+                    .unwrap()
+                    .and_hms_opt(23, 59, 59)
+                    .unwrap()
+            )
+            .unwrap(),
             DateTime::MAX
         );
     }
@@ -417,8 +471,12 @@ mod tests {
     #[test]
     fn try_from_chrono_naive_date_time_to_date_time_with_too_big_date_time() {
         assert_eq!(
-            DateTime::try_from("2108-01-01T00:00:00".parse::<NaiveDateTime>().unwrap())
-                .unwrap_err(),
+            DateTime::try_from(
+                NaiveDate::from_ymd_opt(2108, 1, 1)
+                    .unwrap()
+                    .and_time(NaiveTime::MIN)
+            )
+            .unwrap_err(),
             DateTimeRangeErrorKind::Overflow.into()
         );
     }

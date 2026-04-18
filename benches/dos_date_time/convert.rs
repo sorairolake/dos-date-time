@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 #[cfg(feature = "chrono")]
-use chrono::NaiveDateTime;
+use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 use dos_date_time::{
     DateTime,
     time::{PrimitiveDateTime, macros::datetime},
@@ -38,7 +38,9 @@ fn try_from_primitive_date_time_to_date_time(b: &mut Bencher) {
 #[cfg(feature = "chrono")]
 #[bench]
 fn try_from_chrono_naive_date_time_to_date_time(b: &mut Bencher) {
-    let dt = "1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap();
+    let dt = NaiveDate::from_ymd_opt(1980, 1, 1)
+        .unwrap()
+        .and_time(NaiveTime::MIN);
     b.iter(|| DateTime::try_from(dt).unwrap());
 }
 
