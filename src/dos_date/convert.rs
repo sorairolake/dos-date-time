@@ -124,17 +124,19 @@ impl TryFrom<NaiveDate> for Date {
     /// ```
     /// # use dos_date_time::{Date, chrono::NaiveDate};
     /// #
-    /// let date: NaiveDate = "1980-01-01".parse().unwrap();
-    /// assert_eq!(Date::try_from(date), Ok(Date::MIN));
-    /// let date: NaiveDate = "2107-12-31".parse().unwrap();
-    /// assert_eq!(Date::try_from(date), Ok(Date::MAX));
+    /// assert_eq!(
+    ///     Date::try_from("1980-01-01".parse::<NaiveDate>().unwrap()),
+    ///     Ok(Date::MIN)
+    /// );
+    /// assert_eq!(
+    ///     Date::try_from("2107-12-31".parse::<NaiveDate>().unwrap()),
+    ///     Ok(Date::MAX)
+    /// );
     ///
     /// // Before `1980-01-01`.
-    /// let date: NaiveDate = "1979-12-31".parse().unwrap();
-    /// assert!(Date::try_from(date).is_err());
+    /// assert!(Date::try_from("1979-12-31".parse::<NaiveDate>().unwrap()).is_err());
     /// // After `2107-12-31`.
-    /// let date: NaiveDate = "2108-01-01".parse().unwrap();
-    /// assert!(Date::try_from(date).is_err());
+    /// assert!(Date::try_from("2108-01-01".parse::<NaiveDate>().unwrap()).is_err());
     /// ```
     fn try_from(date: NaiveDate) -> Result<Self, Self::Error> {
         let (year, month, day) = (
@@ -162,17 +164,19 @@ impl TryFrom<civil::Date> for Date {
     /// ```
     /// # use dos_date_time::{Date, jiff::civil};
     /// #
-    /// let date: civil::Date = "1980-01-01".parse().unwrap();
-    /// assert_eq!(Date::try_from(date), Ok(Date::MIN));
-    /// let date: civil::Date = "2107-12-31".parse().unwrap();
-    /// assert_eq!(Date::try_from(date), Ok(Date::MAX));
+    /// assert_eq!(
+    ///     Date::try_from("1980-01-01".parse::<civil::Date>().unwrap()),
+    ///     Ok(Date::MIN)
+    /// );
+    /// assert_eq!(
+    ///     Date::try_from("2107-12-31".parse::<civil::Date>().unwrap()),
+    ///     Ok(Date::MAX)
+    /// );
     ///
     /// // Before `1980-01-01`.
-    /// let date: civil::Date = "1979-12-31".parse().unwrap();
-    /// assert!(Date::try_from(date).is_err());
+    /// assert!(Date::try_from("1979-12-31".parse::<civil::Date>().unwrap()).is_err());
     /// // After `2107-12-31`.
-    /// let date: civil::Date = "2108-01-01".parse().unwrap();
-    /// assert!(Date::try_from(date).is_err());
+    /// assert!(Date::try_from("2108-01-01".parse::<civil::Date>().unwrap()).is_err());
     /// ```
     fn try_from(date: civil::Date) -> Result<Self, Self::Error> {
         let (year, month, day) = (

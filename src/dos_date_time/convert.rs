@@ -150,17 +150,19 @@ impl TryFrom<NaiveDateTime> for DateTime {
     /// ```
     /// # use dos_date_time::{DateTime, chrono::NaiveDateTime};
     /// #
-    /// let dt: NaiveDateTime = "1980-01-01T00:00:00".parse().unwrap();
-    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MIN));
-    /// let dt: NaiveDateTime = "2107-12-31T23:59:58".parse().unwrap();
-    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MAX));
+    /// assert_eq!(
+    ///     DateTime::try_from("1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()),
+    ///     Ok(DateTime::MIN)
+    /// );
+    /// assert_eq!(
+    ///     DateTime::try_from("2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()),
+    ///     Ok(DateTime::MAX)
+    /// );
     ///
     /// // Before `1980-01-01 00:00:00`.
-    /// let dt: NaiveDateTime = "1979-12-31T23:59:59".parse().unwrap();
-    /// assert!(DateTime::try_from(dt).is_err());
+    /// assert!(DateTime::try_from("1979-12-31T23:59:59".parse::<NaiveDateTime>().unwrap()).is_err());
     /// // After `2107-12-31 23:59:59`.
-    /// let dt: NaiveDateTime = "2108-01-01T00:00:00".parse().unwrap();
-    /// assert!(DateTime::try_from(dt).is_err());
+    /// assert!(DateTime::try_from("2108-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()).is_err());
     /// ```
     fn try_from(dt: NaiveDateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date().try_into()?, dt.time().into());
@@ -190,17 +192,19 @@ impl TryFrom<civil::DateTime> for DateTime {
     /// ```
     /// # use dos_date_time::{DateTime, jiff::civil};
     /// #
-    /// let dt: civil::DateTime = "1980-01-01T00:00:00".parse().unwrap();
-    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MIN));
-    /// let dt: civil::DateTime = "2107-12-31T23:59:58".parse().unwrap();
-    /// assert_eq!(DateTime::try_from(dt), Ok(DateTime::MAX));
+    /// assert_eq!(
+    ///     DateTime::try_from("1980-01-01T00:00:00".parse::<civil::DateTime>().unwrap()),
+    ///     Ok(DateTime::MIN)
+    /// );
+    /// assert_eq!(
+    ///     DateTime::try_from("2107-12-31T23:59:58".parse::<civil::DateTime>().unwrap()),
+    ///     Ok(DateTime::MAX)
+    /// );
     ///
     /// // Before `1980-01-01 00:00:00`.
-    /// let dt: civil::DateTime = "1979-12-31T23:59:59".parse().unwrap();
-    /// assert!(DateTime::try_from(dt).is_err());
+    /// assert!(DateTime::try_from("1979-12-31T23:59:59".parse::<civil::DateTime>().unwrap()).is_err());
     /// // After `2107-12-31 23:59:59`.
-    /// let dt: civil::DateTime = "2108-01-01T00:00:00".parse().unwrap();
-    /// assert!(DateTime::try_from(dt).is_err());
+    /// assert!(DateTime::try_from("2108-01-01T00:00:00".parse::<civil::DateTime>().unwrap()).is_err());
     /// ```
     fn try_from(dt: civil::DateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date().try_into()?, dt.time().into());

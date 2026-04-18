@@ -121,10 +121,14 @@ impl From<NaiveTime> for Time {
     /// ```
     /// # use dos_date_time::{Time, chrono::NaiveTime};
     /// #
-    /// let time: NaiveTime = "00:00:00".parse().unwrap();
-    /// assert_eq!(Time::from(time), Time::MIN);
-    /// let time: NaiveTime = "23:59:58".parse().unwrap();
-    /// assert_eq!(Time::from(time), Time::MAX);
+    /// assert_eq!(
+    ///     Time::from("00:00:00".parse::<NaiveTime>().unwrap()),
+    ///     Time::MIN
+    /// );
+    /// assert_eq!(
+    ///     Time::from("23:59:58".parse::<NaiveTime>().unwrap()),
+    ///     Time::MAX
+    /// );
     /// ```
     fn from(time: NaiveTime) -> Self {
         let (hour, minute, second) = (
@@ -154,10 +158,14 @@ impl From<civil::Time> for Time {
     /// ```
     /// # use dos_date_time::{Time, jiff::civil};
     /// #
-    /// let time: civil::Time = "00:00:00".parse().unwrap();
-    /// assert_eq!(Time::from(time), Time::MIN);
-    /// let time: civil::Time = "23:59:58".parse().unwrap();
-    /// assert_eq!(Time::from(time), Time::MAX);
+    /// assert_eq!(
+    ///     Time::from("00:00:00".parse::<civil::Time>().unwrap()),
+    ///     Time::MIN
+    /// );
+    /// assert_eq!(
+    ///     Time::from("23:59:58".parse::<civil::Time>().unwrap()),
+    ///     Time::MAX
+    /// );
     /// ```
     fn from(time: civil::Time) -> Self {
         let (hour, minute, second) = (
