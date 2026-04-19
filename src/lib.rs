@@ -87,6 +87,8 @@ pub mod error;
 pub use chrono;
 #[cfg(feature = "jiff")]
 pub use jiff;
+#[cfg(feature = "rand")]
+pub use rand;
 pub use time;
 
 pub use crate::{dos_date::Date, dos_date_time::DateTime, dos_time::Time};

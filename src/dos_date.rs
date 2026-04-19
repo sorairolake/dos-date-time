@@ -10,6 +10,8 @@ mod cmp;
 mod consts;
 mod convert;
 mod fmt;
+#[cfg(feature = "rand")]
+mod rand;
 
 use time::Month;
 

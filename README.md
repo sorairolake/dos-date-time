@@ -36,6 +36,10 @@ Enables the [`chrono`] crate.
 
 Enables the [`jiff`] crate.
 
+#### `rand`
+
+Enables the [`rand`] crate.
+
 #### `std`
 
 Enables features that depend on the standard library. This is enabled by
@@ -95,6 +99,7 @@ licensing information.
 [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
 [`chrono`]: https://crates.io/crates/chrono
 [`jiff`]: https://crates.io/crates/jiff
+[`rand`]: https://crates.io/crates/rand
 [examples]: examples
 [CHANGELOG.adoc]: CHANGELOG.adoc
 [CONTRIBUTING.adoc]: CONTRIBUTING.adoc
