@@ -21,21 +21,18 @@ all-features = true
 [dependencies]
 chrono = { version = "0.4.44", default-features = false, optional = true }
 jiff = { version = "0.2.23", default-features = false, optional = true }
-rand = { version = "0.10.1", default-features = false, optional = true }
 time = { version = "0.3.47", default-features = false }
 
 [dev-dependencies]
 anyhow = "1.0.102"
 clap = { version = "4.6.0", features = ["derive"] }
-rand_pcg = "0.10.2"
 time = { version = "0.3.47", features = ["formatting", "macros", "parsing"] }
 
 [features]
 default = ["std"]
 chrono = ["dep:chrono"]
 jiff = ["dep:jiff"]
-rand = ["dep:rand"]
-std = ["chrono?/std", "jiff?/std", "rand?/std", "time/std"]
+std = ["chrono?/std", "jiff?/std", "time/std"]
 
 [lints.clippy]
 cargo = { level = "warn", priority = -1 }

@@ -10,8 +10,6 @@ mod cmp;
 mod consts;
 mod convert;
 mod fmt;
-#[cfg(feature = "rand")]
-mod rand;
 
 /// `Time` is a type that represents the [MS-DOS time].
 ///

@@ -8,8 +8,6 @@ extern crate test;
 
 mod cmp;
 mod convert;
-#[cfg(feature = "rand")]
-mod rand;
 
 use dos_date_time::{Date, DateTime, Time, time::macros::date};
 use test::Bencher;
