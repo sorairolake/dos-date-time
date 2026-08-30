@@ -15,11 +15,11 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{
-    /// #     DateTime,
-    /// #     time::macros::{date, time},
-    /// # };
-    /// #
+    /// use dos_date_time::{
+    ///     DateTime,
+    ///     time::macros::{date, time},
+    /// };
+    ///
     /// assert_eq!(
     ///     DateTime::MIN,
     ///     DateTime::from_date_time(date!(1980-01-01), time!(00:00:00)).unwrap()
@@ -34,11 +34,11 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{
-    /// #     DateTime,
-    /// #     time::macros::{date, time},
-    /// # };
-    /// #
+    /// use dos_date_time::{
+    ///     DateTime,
+    ///     time::macros::{date, time},
+    /// };
+    ///
     /// assert_eq!(
     ///     DateTime::MAX,
     ///     DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)).unwrap()
