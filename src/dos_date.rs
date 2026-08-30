@@ -38,8 +38,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Date;
-    /// #
+    /// use dos_date_time::Date;
+    ///
     /// assert_eq!(Date::new(0b0000_0000_0010_0001), Some(Date::MIN));
     /// assert_eq!(Date::new(0b1111_1111_1001_1111), Some(Date::MAX));
     ///
@@ -77,8 +77,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, time::macros::date};
-    /// #
+    /// use dos_date_time::{Date, time::macros::date};
+    ///
     /// assert_eq!(Date::from_date(date!(1980-01-01)), Ok(Date::MIN));
     /// assert_eq!(Date::from_date(date!(2107-12-31)), Ok(Date::MAX));
     ///
@@ -116,8 +116,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Date;
-    /// #
+    /// use dos_date_time::Date;
+    ///
     /// assert_eq!(Date::MIN.to_raw(), 0b0000_0000_0010_0001);
     /// assert_eq!(Date::MAX.to_raw(), 0b1111_1111_1001_1111);
     /// ```
@@ -131,8 +131,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Date;
-    /// #
+    /// use dos_date_time::Date;
+    ///
     /// assert_eq!(Date::MIN.year(), 1980);
     /// assert_eq!(Date::MAX.year(), 2107);
     /// ```
@@ -147,8 +147,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, time::Month};
-    /// #
+    /// use dos_date_time::{Date, time::Month};
+    ///
     /// assert_eq!(Date::MIN.month(), Month::January);
     /// assert_eq!(Date::MAX.month(), Month::December);
     /// ```
@@ -166,8 +166,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Date;
-    /// #
+    /// use dos_date_time::Date;
+    ///
     /// assert_eq!(Date::MIN.day(), 1);
     /// assert_eq!(Date::MAX.day(), 31);
     /// ```
@@ -183,8 +183,8 @@ impl Default for Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Date;
-    /// #
+    /// use dos_date_time::Date;
+    ///
     /// assert_eq!(Date::default(), Date::MIN);
     /// ```
     fn default() -> Self {
