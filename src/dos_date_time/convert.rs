@@ -19,11 +19,11 @@ impl From<DateTime> for PrimitiveDateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{
-    /// #     DateTime,
-    /// #     time::{PrimitiveDateTime, macros::datetime},
-    /// # };
-    /// #
+    /// use dos_date_time::{
+    ///     DateTime,
+    ///     time::{PrimitiveDateTime, macros::datetime},
+    /// };
+    ///
     /// assert_eq!(
     ///     PrimitiveDateTime::from(DateTime::MIN),
     ///     datetime!(1980-01-01 00:00:00)
@@ -46,8 +46,8 @@ impl From<DateTime> for NaiveDateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, chrono::NaiveDateTime};
-    /// #
+    /// use dos_date_time::{DateTime, chrono::NaiveDateTime};
+    ///
     /// assert_eq!(
     ///     NaiveDateTime::from(DateTime::MIN),
     ///     "1980-01-01T00:00:00".parse().unwrap()
@@ -70,8 +70,8 @@ impl From<DateTime> for civil::DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, jiff::civil};
-    /// #
+    /// use dos_date_time::{DateTime, jiff::civil};
+    ///
     /// assert_eq!(
     ///     civil::DateTime::from(DateTime::MIN),
     ///     "1980-01-01T00:00:00".parse().unwrap()
@@ -106,8 +106,8 @@ impl TryFrom<PrimitiveDateTime> for DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, time::macros::datetime};
-    /// #
+    /// use dos_date_time::{DateTime, time::macros::datetime};
+    ///
     /// assert_eq!(
     ///     DateTime::try_from(datetime!(1980-01-01 00:00:00)),
     ///     Ok(DateTime::MIN)
@@ -148,8 +148,8 @@ impl TryFrom<NaiveDateTime> for DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, chrono::NaiveDateTime};
-    /// #
+    /// use dos_date_time::{DateTime, chrono::NaiveDateTime};
+    ///
     /// assert_eq!(
     ///     DateTime::try_from("1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()),
     ///     Ok(DateTime::MIN)
@@ -190,8 +190,8 @@ impl TryFrom<civil::DateTime> for DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, jiff::civil};
-    /// #
+    /// use dos_date_time::{DateTime, jiff::civil};
+    ///
     /// assert_eq!(
     ///     DateTime::try_from("1980-01-01T00:00:00".parse::<civil::DateTime>().unwrap()),
     ///     Ok(DateTime::MIN)
