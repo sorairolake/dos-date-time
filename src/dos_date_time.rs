@@ -53,8 +53,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, DateTime, Time};
-    /// #
+    /// use dos_date_time::{Date, DateTime, Time};
+    ///
     /// assert_eq!(DateTime::new(Date::MIN, Time::MIN), DateTime::MIN);
     /// assert_eq!(DateTime::new(Date::MAX, Time::MAX), DateTime::MAX);
     /// ```
@@ -80,11 +80,11 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{
-    /// #     DateTime,
-    /// #     time::macros::{date, time},
-    /// # };
-    /// #
+    /// use dos_date_time::{
+    ///     DateTime,
+    ///     time::macros::{date, time},
+    /// };
+    ///
     /// assert_eq!(
     ///     DateTime::from_date_time(date!(1980-01-01), time!(00:00:00)),
     ///     Ok(DateTime::MIN)
@@ -116,8 +116,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, DateTime};
-    /// #
+    /// use dos_date_time::{Date, DateTime};
+    ///
     /// assert_eq!(DateTime::MIN.date(), Date::MIN);
     /// assert_eq!(DateTime::MAX.date(), Date::MAX);
     /// ```
@@ -131,8 +131,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, Time};
-    /// #
+    /// use dos_date_time::{DateTime, Time};
+    ///
     /// assert_eq!(DateTime::MIN.time(), Time::MIN);
     /// assert_eq!(DateTime::MAX.time(), Time::MAX);
     /// ```
@@ -146,8 +146,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::DateTime;
-    /// #
+    /// use dos_date_time::DateTime;
+    ///
     /// assert_eq!(DateTime::MIN.year(), 1980);
     /// assert_eq!(DateTime::MAX.year(), 2107);
     /// ```
@@ -161,8 +161,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{DateTime, time::Month};
-    /// #
+    /// use dos_date_time::{DateTime, time::Month};
+    ///
     /// assert_eq!(DateTime::MIN.month(), Month::January);
     /// assert_eq!(DateTime::MAX.month(), Month::December);
     /// ```
@@ -176,8 +176,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::DateTime;
-    /// #
+    /// use dos_date_time::DateTime;
+    ///
     /// assert_eq!(DateTime::MIN.day(), 1);
     /// assert_eq!(DateTime::MAX.day(), 31);
     /// ```
@@ -191,8 +191,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::DateTime;
-    /// #
+    /// use dos_date_time::DateTime;
+    ///
     /// assert_eq!(DateTime::MIN.hour(), 0);
     /// assert_eq!(DateTime::MAX.hour(), 23);
     /// ```
@@ -206,8 +206,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::DateTime;
-    /// #
+    /// use dos_date_time::DateTime;
+    ///
     /// assert_eq!(DateTime::MIN.minute(), 0);
     /// assert_eq!(DateTime::MAX.minute(), 59);
     /// ```
@@ -221,8 +221,8 @@ impl DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::DateTime;
-    /// #
+    /// use dos_date_time::DateTime;
+    ///
     /// assert_eq!(DateTime::MIN.second(), 0);
     /// assert_eq!(DateTime::MAX.second(), 58);
     /// ```
@@ -238,8 +238,8 @@ impl Default for DateTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::DateTime;
-    /// #
+    /// use dos_date_time::DateTime;
+    ///
     /// assert_eq!(DateTime::default(), DateTime::MIN);
     /// ```
     fn default() -> Self {
