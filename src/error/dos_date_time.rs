@@ -23,12 +23,12 @@ impl DateTimeRangeError {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{
-    /// #     DateTime,
-    /// #     error::DateTimeRangeErrorKind,
-    /// #     time::macros::{date, time},
-    /// # };
-    /// #
+    /// use dos_date_time::{
+    ///     DateTime,
+    ///     error::DateTimeRangeErrorKind,
+    ///     time::macros::{date, time},
+    /// };
+    ///
     /// let err = DateTime::from_date_time(date!(1979-12-31), time!(23:59:59)).unwrap_err();
     /// assert_eq!(err.kind(), DateTimeRangeErrorKind::Negative);
     ///
