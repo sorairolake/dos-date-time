@@ -43,8 +43,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(Time::new(0b0000_0000_0000_0000), Some(Time::MIN));
     /// assert_eq!(Time::new(0b1011_1111_0111_1101), Some(Time::MAX));
     ///
@@ -84,8 +84,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, time::macros::time};
-    /// #
+    /// use dos_date_time::{Time, time::macros::time};
+    ///
     /// assert_eq!(Time::from_time(time!(00:00:00)), Time::MIN);
     /// assert_eq!(Time::from_time(time!(23:59:58)), Time::MAX);
     /// ```
@@ -114,8 +114,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(Time::MIN.to_raw(), 0b0000_0000_0000_0000);
     /// assert_eq!(Time::MAX.to_raw(), 0b1011_1111_0111_1101);
     /// ```
@@ -130,8 +130,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(Time::MIN.hour(), 0);
     /// assert_eq!(Time::MAX.hour(), 23);
     /// ```
@@ -146,8 +146,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(Time::MIN.minute(), 0);
     /// assert_eq!(Time::MAX.minute(), 59);
     /// ```
@@ -162,8 +162,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(Time::MIN.second(), 0);
     /// assert_eq!(Time::MAX.second(), 58);
     /// ```
@@ -179,8 +179,8 @@ impl Default for Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(Time::default(), Time::MIN);
     /// ```
     fn default() -> Self {

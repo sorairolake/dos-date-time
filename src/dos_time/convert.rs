@@ -24,8 +24,8 @@ impl From<Time> for time::Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, time::macros::time};
-    /// #
+    /// use dos_date_time::{Time, time::macros::time};
+    ///
     /// assert_eq!(time::Time::from(Time::MIN), time!(00:00:00));
     /// assert_eq!(time::Time::from(Time::MAX), time!(23:59:58));
     /// ```
@@ -43,8 +43,8 @@ impl From<Time> for NaiveTime {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, chrono::NaiveTime};
-    /// #
+    /// use dos_date_time::{Time, chrono::NaiveTime};
+    ///
     /// assert_eq!(NaiveTime::from(Time::MIN), "00:00:00".parse().unwrap());
     /// assert_eq!(NaiveTime::from(Time::MAX), "23:59:58".parse().unwrap());
     /// ```
@@ -66,8 +66,8 @@ impl From<Time> for civil::Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, jiff::civil};
-    /// #
+    /// use dos_date_time::{Time, jiff::civil};
+    ///
     /// assert_eq!(civil::Time::from(Time::MIN), "00:00:00".parse().unwrap());
     /// assert_eq!(civil::Time::from(Time::MAX), "23:59:58".parse().unwrap());
     /// ```
@@ -94,8 +94,8 @@ impl From<time::Time> for Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, time::macros::time};
-    /// #
+    /// use dos_date_time::{Time, time::macros::time};
+    ///
     /// assert_eq!(Time::from(time!(00:00:00)), Time::MIN);
     /// assert_eq!(Time::from(time!(23:59:58)), Time::MAX);
     /// ```
@@ -119,8 +119,8 @@ impl From<NaiveTime> for Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, chrono::NaiveTime};
-    /// #
+    /// use dos_date_time::{Time, chrono::NaiveTime};
+    ///
     /// assert_eq!(
     ///     Time::from("00:00:00".parse::<NaiveTime>().unwrap()),
     ///     Time::MIN
@@ -156,8 +156,8 @@ impl From<civil::Time> for Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, jiff::civil};
-    /// #
+    /// use dos_date_time::{Time, jiff::civil};
+    ///
     /// assert_eq!(
     ///     Time::from("00:00:00".parse::<civil::Time>().unwrap()),
     ///     Time::MIN

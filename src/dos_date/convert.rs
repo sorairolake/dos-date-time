@@ -25,8 +25,8 @@ impl From<Date> for time::Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, time::macros::date};
-    /// #
+    /// use dos_date_time::{Date, time::macros::date};
+    ///
     /// assert_eq!(time::Date::from(Date::MIN), date!(1980-01-01));
     /// assert_eq!(time::Date::from(Date::MAX), date!(2107-12-31));
     /// ```
@@ -44,8 +44,8 @@ impl From<Date> for NaiveDate {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, chrono::NaiveDate};
-    /// #
+    /// use dos_date_time::{Date, chrono::NaiveDate};
+    ///
     /// assert_eq!(NaiveDate::from(Date::MIN), "1980-01-01".parse().unwrap());
     /// assert_eq!(NaiveDate::from(Date::MAX), "2107-12-31".parse().unwrap());
     /// ```
@@ -67,8 +67,8 @@ impl From<Date> for civil::Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, jiff::civil};
-    /// #
+    /// use dos_date_time::{Date, jiff::civil};
+    ///
     /// assert_eq!(civil::Date::from(Date::MIN), "1980-01-01".parse().unwrap());
     /// assert_eq!(civil::Date::from(Date::MAX), "2107-12-31".parse().unwrap());
     /// ```
@@ -94,8 +94,8 @@ impl TryFrom<time::Date> for Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, time::macros::date};
-    /// #
+    /// use dos_date_time::{Date, time::macros::date};
+    ///
     /// assert_eq!(Date::try_from(date!(1980-01-01)), Ok(Date::MIN));
     /// assert_eq!(Date::try_from(date!(2107-12-31)), Ok(Date::MAX));
     ///
@@ -122,8 +122,8 @@ impl TryFrom<NaiveDate> for Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, chrono::NaiveDate};
-    /// #
+    /// use dos_date_time::{Date, chrono::NaiveDate};
+    ///
     /// assert_eq!(
     ///     Date::try_from("1980-01-01".parse::<NaiveDate>().unwrap()),
     ///     Ok(Date::MIN)
@@ -162,8 +162,8 @@ impl TryFrom<civil::Date> for Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, jiff::civil};
-    /// #
+    /// use dos_date_time::{Date, jiff::civil};
+    ///
     /// assert_eq!(
     ///     Date::try_from("1980-01-01".parse::<civil::Date>().unwrap()),
     ///     Ok(Date::MIN)

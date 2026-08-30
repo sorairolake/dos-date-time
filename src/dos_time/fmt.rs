@@ -14,8 +14,8 @@ impl fmt::Display for Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Time;
-    /// #
+    /// use dos_date_time::Time;
+    ///
     /// assert_eq!(format!("{}", Time::MIN), "00:00:00");
     /// assert_eq!(format!("{}", Time::MAX), "23:59:58");
     /// ```

@@ -14,8 +14,8 @@ impl fmt::Display for Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::Date;
-    /// #
+    /// use dos_date_time::Date;
+    ///
     /// assert_eq!(format!("{}", Date::MIN), "1980-01-01");
     /// assert_eq!(format!("{}", Date::MAX), "2107-12-31");
     /// ```

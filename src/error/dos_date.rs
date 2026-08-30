@@ -20,8 +20,8 @@ impl DateRangeError {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, error::DateRangeErrorKind, time::macros::date};
-    /// #
+    /// use dos_date_time::{Date, error::DateRangeErrorKind, time::macros::date};
+    ///
     /// let err = Date::from_date(date!(1979-12-31)).unwrap_err();
     /// assert_eq!(err.kind(), DateRangeErrorKind::Negative);
     ///

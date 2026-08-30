@@ -14,8 +14,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, time::macros::date};
-    /// #
+    /// use dos_date_time::{Date, time::macros::date};
+    ///
     /// assert_eq!(Date::MIN, Date::from_date(date!(1980-01-01)).unwrap());
     /// ```
     // SAFETY: the given MS-DOS date is valid as the smallest MS-DOS date.
@@ -28,8 +28,8 @@ impl Date {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Date, time::macros::date};
-    /// #
+    /// use dos_date_time::{Date, time::macros::date};
+    ///
     /// assert_eq!(Date::MAX, Date::from_date(date!(2107-12-31)).unwrap());
     /// ```
     // SAFETY: the given MS-DOS date is valid as the largest MS-DOS date.

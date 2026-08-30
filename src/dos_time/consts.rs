@@ -14,8 +14,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, time::macros::time};
-    /// #
+    /// use dos_date_time::{Time, time::macros::time};
+    ///
     /// assert_eq!(Time::MIN, Time::from_time(time!(00:00:00)));
     /// ```
     // SAFETY: the given MS-DOS time is valid as the smallest MS-DOS time.
@@ -28,8 +28,8 @@ impl Time {
     /// # Examples
     ///
     /// ```
-    /// # use dos_date_time::{Time, time::macros::time};
-    /// #
+    /// use dos_date_time::{Time, time::macros::time};
+    ///
     /// assert_eq!(Time::MAX, Time::from_time(time!(23:59:58)));
     /// ```
     // SAFETY: the given MS-DOS time is valid as the largest MS-DOS time.
