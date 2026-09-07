@@ -6,15 +6,15 @@
 use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 use dos_date_time::{
     DateTime,
-    time::{PrimitiveDateTime, macros::datetime},
+    time::{PlainDateTime, macros::datetime},
 };
 #[cfg(feature = "jiff")]
 use jiff::civil;
 use test::Bencher;
 
 #[bench]
-fn try_from_date_time_to_primitive_date_time(b: &mut Bencher) {
-    b.iter(|| PrimitiveDateTime::from(DateTime::MIN));
+fn try_from_date_time_to_plain_date_time(b: &mut Bencher) {
+    b.iter(|| PlainDateTime::from(DateTime::MIN));
 }
 
 #[cfg(feature = "chrono")]
@@ -30,7 +30,7 @@ fn try_from_date_time_to_jiff_civil_date_time(b: &mut Bencher) {
 }
 
 #[bench]
-fn try_from_primitive_date_time_to_date_time(b: &mut Bencher) {
+fn try_from_plain_date_time_to_date_time(b: &mut Bencher) {
     let dt = datetime!(1980-01-01 00:00:00);
     b.iter(|| DateTime::try_from(dt).unwrap());
 }

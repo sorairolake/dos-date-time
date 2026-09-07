@@ -10,7 +10,7 @@ use std::{ops::Deref, str::FromStr};
 use anyhow::Context;
 use clap::Parser;
 use dos_date_time::time::{
-    PrimitiveDateTime,
+    PlainDateTime,
     error::Parse,
     format_description::well_known::{Iso8601, Rfc2822, Rfc3339},
 };
@@ -26,10 +26,10 @@ struct Opt {
 }
 
 #[derive(Clone, Debug)]
-struct DateTime(PrimitiveDateTime);
+struct DateTime(PlainDateTime);
 
 impl Deref for DateTime {
-    type Target = PrimitiveDateTime;
+    type Target = PlainDateTime;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -40,9 +40,9 @@ impl FromStr for DateTime {
     type Err = Parse;
 
     fn from_str(dt: &str) -> Result<Self, Self::Err> {
-        PrimitiveDateTime::parse(dt, &Iso8601::DEFAULT)
-            .or_else(|_| PrimitiveDateTime::parse(dt, &Rfc2822))
-            .or_else(|_| PrimitiveDateTime::parse(dt, &Rfc3339))
+        PlainDateTime::parse(dt, &Iso8601::DEFAULT)
+            .or_else(|_| PlainDateTime::parse(dt, &Rfc2822))
+            .or_else(|_| PlainDateTime::parse(dt, &Rfc3339))
             .map(Self)
     }
 }

@@ -8,28 +8,28 @@
 use chrono::NaiveDateTime;
 #[cfg(feature = "jiff")]
 use jiff::civil;
-use time::PrimitiveDateTime;
+use time::PlainDateTime;
 
 use super::DateTime;
 use crate::error::DateTimeRangeError;
 
-impl From<DateTime> for PrimitiveDateTime {
-    /// Converts a `DateTime` to a [`PrimitiveDateTime`].
+impl From<DateTime> for PlainDateTime {
+    /// Converts a `DateTime` to a [`PlainDateTime`].
     ///
     /// # Examples
     ///
     /// ```
     /// use dos_date_time::{
     ///     DateTime,
-    ///     time::{PrimitiveDateTime, macros::datetime},
+    ///     time::{PlainDateTime, macros::datetime},
     /// };
     ///
     /// assert_eq!(
-    ///     PrimitiveDateTime::from(DateTime::MIN),
+    ///     PlainDateTime::from(DateTime::MIN),
     ///     datetime!(1980-01-01 00:00:00)
     /// );
     /// assert_eq!(
-    ///     PrimitiveDateTime::from(DateTime::MAX),
+    ///     PlainDateTime::from(DateTime::MAX),
     ///     datetime!(2107-12-31 23:59:58)
     /// );
     /// ```
@@ -87,10 +87,10 @@ impl From<DateTime> for civil::DateTime {
     }
 }
 
-impl TryFrom<PrimitiveDateTime> for DateTime {
+impl TryFrom<PlainDateTime> for DateTime {
     type Error = DateTimeRangeError;
 
-    /// Converts a [`PrimitiveDateTime`] to a `DateTime`.
+    /// Converts a [`PlainDateTime`] to a `DateTime`.
     ///
     /// <div class="warning">
     ///
@@ -122,7 +122,7 @@ impl TryFrom<PrimitiveDateTime> for DateTime {
     /// // After `2107-12-31 23:59:59`.
     /// assert!(DateTime::try_from(datetime!(2108-01-01 00:00:00)).is_err());
     /// ```
-    fn try_from(dt: PrimitiveDateTime) -> Result<Self, Self::Error> {
+    fn try_from(dt: PlainDateTime) -> Result<Self, Self::Error> {
         let (date, time) = (dt.date(), dt.time());
         Self::from_date_time(date, time)
     }
@@ -222,14 +222,14 @@ mod tests {
     use crate::{Date, Time, error::DateTimeRangeErrorKind};
 
     #[test]
-    fn from_date_time_to_primitive_date_time() {
+    fn from_date_time_to_plain_date_time() {
         assert_eq!(
-            PrimitiveDateTime::from(DateTime::MIN),
+            PlainDateTime::from(DateTime::MIN),
             datetime!(1980-01-01 00:00:00)
         );
         // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
         assert_eq!(
-            PrimitiveDateTime::from(DateTime::new(
+            PlainDateTime::from(DateTime::new(
                 Date::new(0b0010_1101_0111_1010).unwrap(),
                 Time::new(0b1001_1011_0010_0000).unwrap()
             )),
@@ -237,14 +237,14 @@ mod tests {
         );
         // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
         assert_eq!(
-            PrimitiveDateTime::from(DateTime::new(
+            PlainDateTime::from(DateTime::new(
                 Date::new(0b0100_1101_0111_0001).unwrap(),
                 Time::new(0b0101_0100_1100_1111).unwrap()
             )),
             datetime!(2018-11-17 10:38:30)
         );
         assert_eq!(
-            PrimitiveDateTime::from(DateTime::MAX),
+            PlainDateTime::from(DateTime::MAX),
             datetime!(2107-12-31 23:59:58)
         );
     }
@@ -319,7 +319,7 @@ mod tests {
     }
 
     #[test]
-    fn try_from_primitive_date_time_to_date_time_before_dos_date_time_epoch() {
+    fn try_from_plain_date_time_to_date_time_before_dos_date_time_epoch() {
         assert_eq!(
             DateTime::try_from(datetime!(1979-12-31 23:59:58)).unwrap_err(),
             DateTimeRangeErrorKind::Negative.into()
@@ -331,7 +331,7 @@ mod tests {
     }
 
     #[test]
-    fn try_from_primitive_date_time_to_date_time() {
+    fn try_from_plain_date_time_to_date_time() {
         assert_eq!(
             DateTime::try_from(datetime!(1980-01-01 00:00:00)).unwrap(),
             DateTime::MIN
@@ -367,7 +367,7 @@ mod tests {
     }
 
     #[test]
-    fn try_from_primitive_date_time_to_date_time_with_too_big_date_time() {
+    fn try_from_plain_date_time_to_date_time_with_too_big_date_time() {
         assert_eq!(
             DateTime::try_from(datetime!(2108-01-01 00:00:00)).unwrap_err(),
             DateTimeRangeErrorKind::Overflow.into()

@@ -14,18 +14,18 @@
 //! ## Basic usage
 //!
 //! [`DateTime`] can be converted from and to a type which represents time such
-//! as [`time::PrimitiveDateTime`].
+//! as [`time::PlainDateTime`].
 //!
 //! ```
 //! use core::time::Duration;
 //!
 //! use dos_date_time::{
 //!     DateTime,
-//!     time::{PrimitiveDateTime, macros::datetime},
+//!     time::{PlainDateTime, macros::datetime},
 //! };
 //!
 //! let dt = DateTime::MIN;
-//! let dt = PrimitiveDateTime::from(dt);
+//! let dt = PlainDateTime::from(dt);
 //! assert_eq!(dt, datetime!(1980-01-01 00:00:00));
 //!
 //! // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
@@ -43,18 +43,18 @@
 //! The [`Display`](core::fmt::Display) trait for [`DateTime`] is implemented to
 //! show the value in the well-known [RFC 3339 format]. If you need a different
 //! date and time format, convert [`DateTime`] to a type which represents time
-//! such as [`time::PrimitiveDateTime`].
+//! such as [`time::PlainDateTime`].
 //!
 //! ```
 //! use dos_date_time::{
 //!     DateTime,
-//!     time::{PrimitiveDateTime, format_description::well_known::Rfc2822},
+//!     time::{PlainDateTime, format_description::well_known::Rfc2822},
 //! };
 //!
 //! let dt = DateTime::MIN;
 //! assert_eq!(format!("{dt}"), "1980-01-01 00:00:00");
 //!
-//! let dt = PrimitiveDateTime::from(dt)
+//! let dt = PlainDateTime::from(dt)
 //!     .as_utc()
 //!     .format(&Rfc2822)
 //!     .unwrap();
