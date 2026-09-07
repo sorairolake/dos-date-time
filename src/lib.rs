@@ -54,10 +54,7 @@
 //! let dt = DateTime::MIN;
 //! assert_eq!(format!("{dt}"), "1980-01-01 00:00:00");
 //!
-//! let dt = PlainDateTime::from(dt)
-//!     .as_utc()
-//!     .format(&Rfc2822)
-//!     .unwrap();
+//! let dt = PlainDateTime::from(dt).as_utc().format(&Rfc2822).unwrap();
 //! assert_eq!(format!("{dt}"), "Tue, 01 Jan 1980 00:00:00 +0000");
 //! ```
 //!
