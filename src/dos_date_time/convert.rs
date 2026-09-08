@@ -94,7 +94,7 @@ impl TryFrom<PlainDateTime> for DateTime {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `DateTime` cannot store.
     ///
     /// </div>
@@ -136,7 +136,7 @@ impl TryFrom<NaiveDateTime> for DateTime {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `DateTime` cannot store.
     ///
     /// </div>
@@ -178,7 +178,7 @@ impl TryFrom<civil::DateTime> for DateTime {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `DateTime` cannot store.
     ///
     /// </div>

@@ -68,7 +68,7 @@ impl DateTime {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `DateTime` cannot store.
     ///
     /// </div>

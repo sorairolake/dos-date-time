@@ -86,7 +86,7 @@ impl From<time::Time> for Time {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `Time` cannot store.
     ///
     /// </div>
@@ -111,7 +111,7 @@ impl From<NaiveTime> for Time {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `Time` cannot store.
     ///
     /// </div>
@@ -148,7 +148,7 @@ impl From<civil::Time> for Time {
     ///
     /// <div class="warning">
     ///
-    /// This method may round towards zero, truncating more precise times that a
+    /// This function may round towards zero, truncating more precise times that a
     /// `Time` cannot store.
     ///
     /// </div>
