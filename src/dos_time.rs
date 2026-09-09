@@ -76,8 +76,8 @@ impl Time {
     ///
     /// <div class="warning">
     ///
-    /// This function may round towards zero, truncating more precise times that a
-    /// `Time` cannot store.
+    /// This function may round towards zero, truncating more precise times that
+    /// a `Time` cannot store.
     ///
     /// </div>
     ///
