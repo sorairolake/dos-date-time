@@ -45,10 +45,12 @@ mod tests {
     #[test]
     fn min() {
         assert_eq!(Date::MIN, Date::from_date(date!(1980-01-01)).unwrap());
+        assert_eq!(Date::MIN.to_raw(), 0b0000_0000_0010_0001);
     }
 
     #[test]
     fn max() {
         assert_eq!(Date::MAX, Date::from_date(date!(2107-12-31)).unwrap());
+        assert_eq!(Date::MAX.to_raw(), 0b1111_1111_1001_1111);
     }
 }
