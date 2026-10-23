@@ -45,10 +45,12 @@ mod tests {
     #[test]
     fn min() {
         assert_eq!(Time::MIN, Time::from_time(time::Time::MIDNIGHT));
+        assert_eq!(Time::MIN.to_raw(), u16::MIN);
     }
 
     #[test]
     fn max() {
         assert_eq!(Time::MAX, Time::from_time(time!(23:59:58)));
+        assert_eq!(Time::MAX.to_raw(), 0b1011_1111_0111_1101);
     }
 }
