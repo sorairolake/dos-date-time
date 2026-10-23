@@ -59,6 +59,8 @@ mod tests {
             DateTime::MIN,
             DateTime::from_date_time(date!(1980-01-01), time::Time::MIDNIGHT).unwrap()
         );
+        assert_eq!(DateTime::MIN.date(), Date::MIN);
+        assert_eq!(DateTime::MIN.time(), Time::MIN);
     }
 
     #[test]
@@ -67,5 +69,7 @@ mod tests {
             DateTime::MAX,
             DateTime::from_date_time(date!(2107-12-31), time!(23:59:58)).unwrap()
         );
+        assert_eq!(DateTime::MAX.date(), Date::MAX);
+        assert_eq!(DateTime::MAX.time(), Time::MAX);
     }
 }
