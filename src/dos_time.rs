@@ -45,7 +45,7 @@ impl Time {
     /// ```
     /// use dos_date_time::Time;
     ///
-    /// assert_eq!(Time::new(0b0000_0000_0000_0000), Some(Time::MIN));
+    /// assert_eq!(Time::new(0), Some(Time::MIN));
     /// assert_eq!(Time::new(0b1011_1111_0111_1101), Some(Time::MAX));
     ///
     /// // The DoubleSeconds field is 30.
@@ -116,7 +116,7 @@ impl Time {
     /// ```
     /// use dos_date_time::Time;
     ///
-    /// assert_eq!(Time::MIN.to_raw(), 0b0000_0000_0000_0000);
+    /// assert_eq!(Time::MIN.to_raw(), 0);
     /// assert_eq!(Time::MAX.to_raw(), 0b1011_1111_0111_1101);
     /// ```
     #[must_use]
