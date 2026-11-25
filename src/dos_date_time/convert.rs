@@ -4,8 +4,6 @@
 
 //! Implementations of conversions between [`DateTime`] and other types.
 
-#[cfg(feature = "chrono")]
-use chrono::NaiveDateTime;
 #[cfg(feature = "jiff")]
 use jiff::civil;
 use time::PlainDateTime;
@@ -31,30 +29,6 @@ impl From<DateTime> for PlainDateTime {
     /// assert_eq!(
     ///     PlainDateTime::from(DateTime::MAX),
     ///     datetime!(2107-12-31 23:59:58)
-    /// );
-    /// ```
-    fn from(dt: DateTime) -> Self {
-        let (date, time) = (dt.date().into(), dt.time().into());
-        Self::new(date, time)
-    }
-}
-
-#[cfg(feature = "chrono")]
-impl From<DateTime> for NaiveDateTime {
-    /// Converts a `DateTime` to a [`NaiveDateTime`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{DateTime, chrono::NaiveDateTime};
-    ///
-    /// assert_eq!(
-    ///     NaiveDateTime::from(DateTime::MIN),
-    ///     "1980-01-01T00:00:00".parse().unwrap()
-    /// );
-    /// assert_eq!(
-    ///     NaiveDateTime::from(DateTime::MAX),
-    ///     "2107-12-31T23:59:58".parse().unwrap()
     /// );
     /// ```
     fn from(dt: DateTime) -> Self {
@@ -128,48 +102,6 @@ impl TryFrom<PlainDateTime> for DateTime {
     }
 }
 
-#[cfg(feature = "chrono")]
-impl TryFrom<NaiveDateTime> for DateTime {
-    type Error = DateTimeRangeError;
-
-    /// Converts a [`NaiveDateTime`] to a `DateTime`.
-    ///
-    /// <div class="warning">
-    ///
-    /// This function may round towards zero, truncating more precise times that
-    /// a `DateTime` cannot store.
-    ///
-    /// </div>
-    ///
-    /// # Errors
-    ///
-    /// Returns [`Err`] if `dt` is out of range for MS-DOS date and time.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{DateTime, chrono::NaiveDateTime};
-    ///
-    /// assert_eq!(
-    ///     DateTime::try_from("1980-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()),
-    ///     Ok(DateTime::MIN)
-    /// );
-    /// assert_eq!(
-    ///     DateTime::try_from("2107-12-31T23:59:58".parse::<NaiveDateTime>().unwrap()),
-    ///     Ok(DateTime::MAX)
-    /// );
-    ///
-    /// // Before `1980-01-01 00:00:00`.
-    /// assert!(DateTime::try_from("1979-12-31T23:59:59".parse::<NaiveDateTime>().unwrap()).is_err());
-    /// // After `2107-12-31 23:59:59`.
-    /// assert!(DateTime::try_from("2108-01-01T00:00:00".parse::<NaiveDateTime>().unwrap()).is_err());
-    /// ```
-    fn try_from(dt: NaiveDateTime) -> Result<Self, Self::Error> {
-        let (date, time) = (dt.date().try_into()?, dt.time().into());
-        Ok(Self::new(date, time))
-    }
-}
-
 #[cfg(feature = "jiff")]
 impl TryFrom<civil::DateTime> for DateTime {
     type Error = DateTimeRangeError;
@@ -214,8 +146,6 @@ impl TryFrom<civil::DateTime> for DateTime {
 
 #[cfg(test)]
 mod tests {
-    #[cfg(feature = "chrono")]
-    use chrono::{NaiveDate, NaiveTime};
     use time::macros::datetime;
 
     use super::*;
@@ -246,46 +176,6 @@ mod tests {
         assert_eq!(
             PlainDateTime::from(DateTime::MAX),
             datetime!(2107-12-31 23:59:58)
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn from_date_time_to_chrono_naive_date_time() {
-        assert_eq!(
-            NaiveDateTime::from(DateTime::MIN),
-            NaiveDate::from_ymd_opt(1980, 1, 1)
-                .unwrap()
-                .and_time(NaiveTime::MIN)
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            NaiveDateTime::from(DateTime::new(
-                Date::new(0b0010_1101_0111_1010).unwrap(),
-                Time::new(0b1001_1011_0010_0000).unwrap()
-            )),
-            NaiveDate::from_ymd_opt(2002, 11, 26)
-                .unwrap()
-                .and_hms_opt(19, 25, 0)
-                .unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            NaiveDateTime::from(DateTime::new(
-                Date::new(0b0100_1101_0111_0001).unwrap(),
-                Time::new(0b0101_0100_1100_1111).unwrap()
-            )),
-            NaiveDate::from_ymd_opt(2018, 11, 17)
-                .unwrap()
-                .and_hms_opt(10, 38, 30)
-                .unwrap()
-        );
-        assert_eq!(
-            NaiveDateTime::from(DateTime::MAX),
-            NaiveDate::from_ymd_opt(2107, 12, 31)
-                .unwrap()
-                .and_hms_opt(23, 59, 58)
-                .unwrap()
         );
     }
 
@@ -370,117 +260,6 @@ mod tests {
     fn try_from_plain_date_time_to_date_time_with_too_big_date_time() {
         assert_eq!(
             DateTime::try_from(datetime!(2108-01-01 00:00:00)).unwrap_err(),
-            DateTimeRangeErrorKind::Overflow.into()
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn try_from_chrono_naive_date_time_to_date_time_before_dos_date_time_epoch() {
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(1979, 12, 31)
-                    .unwrap()
-                    .and_hms_opt(23, 59, 58)
-                    .unwrap()
-            )
-            .unwrap_err(),
-            DateTimeRangeErrorKind::Negative.into()
-        );
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(1979, 12, 31)
-                    .unwrap()
-                    .and_hms_opt(23, 59, 59)
-                    .unwrap()
-            )
-            .unwrap_err(),
-            DateTimeRangeErrorKind::Negative.into()
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn try_from_chrono_naive_date_time_to_date_time() {
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(1980, 1, 1)
-                    .unwrap()
-                    .and_time(NaiveTime::MIN)
-            )
-            .unwrap(),
-            DateTime::MIN
-        );
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(1980, 1, 1)
-                    .unwrap()
-                    .and_hms_opt(0, 0, 1)
-                    .unwrap()
-            )
-            .unwrap(),
-            DateTime::MIN
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(2002, 11, 26)
-                    .unwrap()
-                    .and_hms_opt(19, 25, 0)
-                    .unwrap()
-            )
-            .unwrap(),
-            DateTime::new(
-                Date::new(0b0010_1101_0111_1010).unwrap(),
-                Time::new(0b1001_1011_0010_0000).unwrap()
-            )
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(2018, 11, 17)
-                    .unwrap()
-                    .and_hms_opt(10, 38, 30)
-                    .unwrap()
-            )
-            .unwrap(),
-            DateTime::new(
-                Date::new(0b0100_1101_0111_0001).unwrap(),
-                Time::new(0b0101_0100_1100_1111).unwrap()
-            )
-        );
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(2107, 12, 31)
-                    .unwrap()
-                    .and_hms_opt(23, 59, 58)
-                    .unwrap()
-            )
-            .unwrap(),
-            DateTime::MAX
-        );
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(2107, 12, 31)
-                    .unwrap()
-                    .and_hms_opt(23, 59, 59)
-                    .unwrap()
-            )
-            .unwrap(),
-            DateTime::MAX
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn try_from_chrono_naive_date_time_to_date_time_with_too_big_date_time() {
-        assert_eq!(
-            DateTime::try_from(
-                NaiveDate::from_ymd_opt(2108, 1, 1)
-                    .unwrap()
-                    .and_time(NaiveTime::MIN)
-            )
-            .unwrap_err(),
             DateTimeRangeErrorKind::Overflow.into()
         );
     }

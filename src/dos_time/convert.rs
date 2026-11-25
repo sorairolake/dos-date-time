@@ -4,8 +4,6 @@
 
 //! Implementations of conversions between [`Time`] and other types.
 
-#[cfg(feature = "chrono")]
-use chrono::{NaiveTime, Timelike};
 #[cfg(feature = "jiff")]
 use jiff::civil;
 
@@ -32,29 +30,6 @@ impl From<Time> for time::Time {
     fn from(time: Time) -> Self {
         let (hour, minute, second) = (time.hour(), time.minute(), time.second());
         Self::from_hms(hour, minute, second).unwrap()
-    }
-}
-
-#[cfg(feature = "chrono")]
-#[expect(clippy::fallible_impl_from)]
-impl From<Time> for NaiveTime {
-    /// Converts a `Time` to a [`NaiveTime`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Time, chrono::NaiveTime};
-    ///
-    /// assert_eq!(NaiveTime::from(Time::MIN), "00:00:00".parse().unwrap());
-    /// assert_eq!(NaiveTime::from(Time::MAX), "23:59:58".parse().unwrap());
-    /// ```
-    fn from(time: Time) -> Self {
-        let (hour, minute, second) = (
-            time.hour().into(),
-            time.minute().into(),
-            time.second().into(),
-        );
-        Self::from_hms_opt(hour, minute, second).unwrap()
     }
 }
 
@@ -100,43 +75,6 @@ impl From<time::Time> for Time {
     /// assert_eq!(Time::from(time!(23:59:58)), Time::MAX);
     /// ```
     fn from(time: time::Time) -> Self {
-        Self::from_time(time)
-    }
-}
-
-#[cfg(feature = "chrono")]
-#[expect(clippy::fallible_impl_from)]
-impl From<NaiveTime> for Time {
-    /// Converts a [`NaiveTime`] to a `Time`.
-    ///
-    /// <div class="warning">
-    ///
-    /// This function may round towards zero, truncating more precise times that
-    /// a `Time` cannot store.
-    ///
-    /// </div>
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Time, chrono::NaiveTime};
-    ///
-    /// assert_eq!(
-    ///     Time::from("00:00:00".parse::<NaiveTime>().unwrap()),
-    ///     Time::MIN
-    /// );
-    /// assert_eq!(
-    ///     Time::from("23:59:58".parse::<NaiveTime>().unwrap()),
-    ///     Time::MAX
-    /// );
-    /// ```
-    fn from(time: NaiveTime) -> Self {
-        let (hour, minute, second) = (
-            time.hour().try_into().unwrap(),
-            time.minute().try_into().unwrap(),
-            time.second().try_into().unwrap(),
-        );
-        let time = time::Time::from_hms(hour, minute, second).unwrap();
         Self::from_time(time)
     }
 }
@@ -216,26 +154,6 @@ mod tests {
         assert_eq!(time::Time::from(Time::MAX), time!(23:59:58));
     }
 
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn from_time_to_chrono_naive_time() {
-        assert_eq!(NaiveTime::from(Time::MIN), NaiveTime::MIN);
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            NaiveTime::from(Time::new(0b1001_1011_0010_0000).unwrap()),
-            NaiveTime::from_hms_opt(19, 25, 0).unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            NaiveTime::from(Time::new(0b0101_0100_1100_1111).unwrap()),
-            NaiveTime::from_hms_opt(10, 38, 30).unwrap()
-        );
-        assert_eq!(
-            NaiveTime::from(Time::MAX),
-            NaiveTime::from_hms_opt(23, 59, 58).unwrap()
-        );
-    }
-
     #[cfg(feature = "jiff")]
     #[test]
     fn from_time_to_jiff_civil_time() {
@@ -269,34 +187,6 @@ mod tests {
         );
         assert_eq!(Time::from(time!(23:59:58)), Time::MAX);
         assert_eq!(Time::from(time!(23:59:59)), Time::MAX);
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn from_chrono_naive_time_to_time() {
-        assert_eq!(Time::from(NaiveTime::MIN), Time::MIN);
-        assert_eq!(
-            Time::from(NaiveTime::from_hms_opt(0, 0, 1).unwrap()),
-            Time::MIN
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            Time::from(NaiveTime::from_hms_opt(19, 25, 0).unwrap()),
-            Time::new(0b1001_1011_0010_0000).unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            Time::from(NaiveTime::from_hms_opt(10, 38, 30).unwrap()),
-            Time::new(0b0101_0100_1100_1111).unwrap()
-        );
-        assert_eq!(
-            Time::from(NaiveTime::from_hms_opt(23, 59, 58).unwrap()),
-            Time::MAX
-        );
-        assert_eq!(
-            Time::from(NaiveTime::from_hms_opt(23, 59, 59).unwrap()),
-            Time::MAX
-        );
     }
 
     #[cfg(feature = "jiff")]
