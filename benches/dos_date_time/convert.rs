@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-#[cfg(feature = "chrono")]
-use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 use dos_date_time::{
     DateTime,
     time::{PlainDateTime, macros::datetime},
@@ -17,12 +15,6 @@ fn try_from_date_time_to_plain_date_time(b: &mut Bencher) {
     b.iter(|| PlainDateTime::from(DateTime::MIN));
 }
 
-#[cfg(feature = "chrono")]
-#[bench]
-fn from_date_time_to_chrono_naive_date_time(b: &mut Bencher) {
-    b.iter(|| NaiveDateTime::from(DateTime::MIN));
-}
-
 #[cfg(feature = "jiff")]
 #[bench]
 fn try_from_date_time_to_jiff_civil_date_time(b: &mut Bencher) {
@@ -32,15 +24,6 @@ fn try_from_date_time_to_jiff_civil_date_time(b: &mut Bencher) {
 #[bench]
 fn try_from_plain_date_time_to_date_time(b: &mut Bencher) {
     let dt = datetime!(1980-01-01 00:00:00);
-    b.iter(|| DateTime::try_from(dt).unwrap());
-}
-
-#[cfg(feature = "chrono")]
-#[bench]
-fn try_from_chrono_naive_date_time_to_date_time(b: &mut Bencher) {
-    let dt = NaiveDate::from_ymd_opt(1980, 1, 1)
-        .unwrap()
-        .and_time(NaiveTime::MIN);
     b.iter(|| DateTime::try_from(dt).unwrap());
 }
 
