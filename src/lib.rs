@@ -80,8 +80,6 @@ mod dos_date_time;
 mod dos_time;
 pub mod error;
 
-#[cfg(feature = "chrono")]
-pub use chrono;
 #[cfg(feature = "jiff")]
 pub use jiff;
 pub use time;
