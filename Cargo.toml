@@ -20,12 +20,10 @@ all-features = true
 
 [features]
 default = ["std"]
-chrono = ["dep:chrono"]
 jiff = ["dep:jiff"]
-std = ["chrono?/std", "jiff?/std", "time/std"]
+std = ["jiff?/std", "time/std"]
 
 [dependencies]
-chrono = { version = "0.4.44", default-features = false, optional = true }
 jiff = { version = "1.0.0", default-features = false, optional = true }
 time = { version = "0.3.47", default-features = false }
 
