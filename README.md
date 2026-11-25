@@ -28,13 +28,6 @@ cargo add dos-date-time
 
 ### Crate features
 
-#### `chrono`
-
-Enables the [`chrono`] crate.
-
-> [!IMPORTANT]
-> The `chrono` crate is unmaintained. See [RUSTSEC-2026-0543] for details.
-
 #### `jiff`
 
 Enables the [`jiff`] crate.
@@ -96,8 +89,6 @@ licensing information.
 [Rust]: https://www.rust-lang.org/
 [FAT]: https://en.wikipedia.org/wiki/File_Allocation_Table
 [ZIP]: https://en.wikipedia.org/wiki/ZIP_(file_format)
-[`chrono`]: https://crates.io/crates/chrono
-[RUSTSEC-2026-0543]: https://rustsec.org/advisories/RUSTSEC-2026-0543.html
 [`jiff`]: https://crates.io/crates/jiff
 [examples]: examples
 [CHANGELOG.adoc]: CHANGELOG.adoc
