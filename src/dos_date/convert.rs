@@ -4,8 +4,6 @@
 
 //! Implementations of conversions between [`Date`] and other types.
 
-#[cfg(feature = "chrono")]
-use chrono::{Datelike, NaiveDate};
 #[cfg(feature = "jiff")]
 use jiff::civil;
 
@@ -33,29 +31,6 @@ impl From<Date> for time::Date {
     fn from(date: Date) -> Self {
         let (year, month, day) = (date.year().into(), date.month(), date.day());
         Self::from_calendar_date(year, month, day).unwrap()
-    }
-}
-
-#[cfg(feature = "chrono")]
-#[expect(clippy::fallible_impl_from)]
-impl From<Date> for NaiveDate {
-    /// Converts a `Date` to a [`NaiveDate`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Date, chrono::NaiveDate};
-    ///
-    /// assert_eq!(NaiveDate::from(Date::MIN), "1980-01-01".parse().unwrap());
-    /// assert_eq!(NaiveDate::from(Date::MAX), "2107-12-31".parse().unwrap());
-    /// ```
-    fn from(date: Date) -> Self {
-        let (year, month, day) = (
-            date.year().into(),
-            u8::from(date.month()).into(),
-            date.day().into(),
-        );
-        Self::from_ymd_opt(year, month, day).unwrap()
     }
 }
 
@@ -105,46 +80,6 @@ impl TryFrom<time::Date> for Date {
     /// assert!(Date::try_from(date!(2108-01-01)).is_err());
     /// ```
     fn try_from(date: time::Date) -> Result<Self, Self::Error> {
-        Self::from_date(date)
-    }
-}
-
-#[cfg(feature = "chrono")]
-impl TryFrom<NaiveDate> for Date {
-    type Error = DateRangeError;
-
-    /// Converts a [`NaiveDate`] to a `Date`.
-    ///
-    /// # Errors
-    ///
-    /// Returns [`Err`] if `date` is out of range for the MS-DOS date.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Date, chrono::NaiveDate};
-    ///
-    /// assert_eq!(
-    ///     Date::try_from("1980-01-01".parse::<NaiveDate>().unwrap()),
-    ///     Ok(Date::MIN)
-    /// );
-    /// assert_eq!(
-    ///     Date::try_from("2107-12-31".parse::<NaiveDate>().unwrap()),
-    ///     Ok(Date::MAX)
-    /// );
-    ///
-    /// // Before `1980-01-01`.
-    /// assert!(Date::try_from("1979-12-31".parse::<NaiveDate>().unwrap()).is_err());
-    /// // After `2107-12-31`.
-    /// assert!(Date::try_from("2108-01-01".parse::<NaiveDate>().unwrap()).is_err());
-    /// ```
-    fn try_from(date: NaiveDate) -> Result<Self, Self::Error> {
-        let (year, month, day) = (
-            date.year(),
-            u8::try_from(date.month()).unwrap().try_into().unwrap(),
-            date.day().try_into().unwrap(),
-        );
-        let date = time::Date::from_calendar_date(year, month, day).unwrap();
         Self::from_date(date)
     }
 }
@@ -228,29 +163,6 @@ mod tests {
         assert_eq!(time::Date::from(Date::MAX), date!(2107-12-31));
     }
 
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn from_date_to_chrono_naive_date() {
-        assert_eq!(
-            NaiveDate::from(Date::MIN),
-            NaiveDate::from_ymd_opt(1980, 1, 1).unwrap()
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            NaiveDate::from(Date::new(0b0010_1101_0111_1010).unwrap()),
-            NaiveDate::from_ymd_opt(2002, 11, 26).unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            NaiveDate::from(Date::new(0b0100_1101_0111_0001).unwrap()),
-            NaiveDate::from_ymd_opt(2018, 11, 17).unwrap()
-        );
-        assert_eq!(
-            NaiveDate::from(Date::MAX),
-            NaiveDate::from_ymd_opt(2107, 12, 31).unwrap()
-        );
-    }
-
     #[cfg(feature = "jiff")]
     #[test]
     fn from_date_to_jiff_civil_date() {
@@ -302,59 +214,6 @@ mod tests {
     fn try_from_time_date_to_date_with_too_big_date() {
         assert_eq!(
             Date::try_from(date!(2108-01-01)).unwrap_err(),
-            DateRangeErrorKind::Overflow.into()
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn try_from_chrono_naive_date_to_date_before_dos_date_epoch() {
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(1979, 12, 31).unwrap()).unwrap_err(),
-            DateRangeErrorKind::Negative.into()
-        );
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(1979, 12, 31).unwrap()).unwrap_err(),
-            DateRangeErrorKind::Negative.into()
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn try_from_chrono_naive_date_to_date() {
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(1980, 1, 1).unwrap()).unwrap(),
-            Date::MIN
-        );
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(1980, 1, 1).unwrap()).unwrap(),
-            Date::MIN
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(2002, 11, 26).unwrap()).unwrap(),
-            Date::new(0b0010_1101_0111_1010).unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(2018, 11, 17).unwrap()).unwrap(),
-            Date::new(0b0100_1101_0111_0001).unwrap()
-        );
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(2107, 12, 31).unwrap()).unwrap(),
-            Date::MAX
-        );
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(2107, 12, 31).unwrap()).unwrap(),
-            Date::MAX
-        );
-    }
-
-    #[cfg(feature = "chrono")]
-    #[test]
-    fn try_from_chrono_naive_date_to_date_with_too_big_date() {
-        assert_eq!(
-            Date::try_from(NaiveDate::from_ymd_opt(2108, 1, 1).unwrap()).unwrap_err(),
             DateRangeErrorKind::Overflow.into()
         );
     }
