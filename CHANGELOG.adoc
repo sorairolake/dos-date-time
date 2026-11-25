@@ -20,6 +20,10 @@ project adheres to https://semver.org/[Semantic Versioning].
 
 * Bump `jiff` to 1.0.0 ({pull-request-url}/167[#167])
 
+=== Removed
+
+* Remove `chrono` support ({pull-request-url}/174[#174])
+
 == {compare-url}/v0.2.2\...v0.3.0[0.3.0] - 2026-02-28
 
 === Changed
