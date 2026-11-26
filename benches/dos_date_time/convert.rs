@@ -11,17 +11,6 @@ use jiff::civil;
 use test::Bencher;
 
 #[bench]
-fn try_from_date_time_to_plain_date_time(b: &mut Bencher) {
-    b.iter(|| PlainDateTime::from(DateTime::MIN));
-}
-
-#[cfg(feature = "jiff")]
-#[bench]
-fn try_from_date_time_to_jiff_civil_date_time(b: &mut Bencher) {
-    b.iter(|| civil::DateTime::from(DateTime::MIN));
-}
-
-#[bench]
 fn try_from_plain_date_time_to_date_time(b: &mut Bencher) {
     let dt = datetime!(1980-01-01 00:00:00);
     b.iter(|| DateTime::try_from(dt).unwrap());
@@ -32,4 +21,15 @@ fn try_from_plain_date_time_to_date_time(b: &mut Bencher) {
 fn try_from_jiff_civil_date_time_to_date_time(b: &mut Bencher) {
     let dt = civil::date(1980, 1, 1).at(0, 0, 0, 0);
     b.iter(|| DateTime::try_from(dt).unwrap());
+}
+
+#[bench]
+fn try_from_date_time_to_plain_date_time(b: &mut Bencher) {
+    b.iter(|| PlainDateTime::from(DateTime::MIN));
+}
+
+#[cfg(feature = "jiff")]
+#[bench]
+fn try_from_date_time_to_jiff_civil_date_time(b: &mut Bencher) {
+    b.iter(|| civil::DateTime::from(DateTime::MIN));
 }
