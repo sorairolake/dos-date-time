@@ -10,53 +10,6 @@ use jiff::civil;
 use super::Date;
 use crate::error::DateRangeError;
 
-impl From<Date> for u16 {
-    fn from(date: Date) -> Self {
-        date.to_raw()
-    }
-}
-
-#[expect(clippy::fallible_impl_from)]
-impl From<Date> for time::Date {
-    /// Converts a `Date` to a [`time::Date`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Date, time::macros::date};
-    ///
-    /// assert_eq!(time::Date::from(Date::MIN), date!(1980-01-01));
-    /// assert_eq!(time::Date::from(Date::MAX), date!(2107-12-31));
-    /// ```
-    fn from(date: Date) -> Self {
-        let (year, month, day) = (date.year().into(), date.month(), date.day());
-        Self::from_calendar_date(year, month, day).unwrap()
-    }
-}
-
-#[cfg(feature = "jiff")]
-#[expect(clippy::fallible_impl_from)]
-impl From<Date> for civil::Date {
-    /// Converts a `Date` to a [`civil::Date`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Date, jiff::civil};
-    ///
-    /// assert_eq!(civil::Date::from(Date::MIN), "1980-01-01".parse().unwrap());
-    /// assert_eq!(civil::Date::from(Date::MAX), "2107-12-31".parse().unwrap());
-    /// ```
-    fn from(date: Date) -> Self {
-        let (year, month, day) = (
-            date.year().try_into().unwrap(),
-            u8::from(date.month()).try_into().unwrap(),
-            date.day().try_into().unwrap(),
-        );
-        civil::date(year, month, day)
-    }
-}
-
 impl TryFrom<time::Date> for Date {
     type Error = DateRangeError;
 
@@ -124,61 +77,59 @@ impl TryFrom<civil::Date> for Date {
     }
 }
 
+impl From<Date> for u16 {
+    fn from(date: Date) -> Self {
+        date.to_raw()
+    }
+}
+
+#[expect(clippy::fallible_impl_from)]
+impl From<Date> for time::Date {
+    /// Converts a `Date` to a [`time::Date`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use dos_date_time::{Date, time::macros::date};
+    ///
+    /// assert_eq!(time::Date::from(Date::MIN), date!(1980-01-01));
+    /// assert_eq!(time::Date::from(Date::MAX), date!(2107-12-31));
+    /// ```
+    fn from(date: Date) -> Self {
+        let (year, month, day) = (date.year().into(), date.month(), date.day());
+        Self::from_calendar_date(year, month, day).unwrap()
+    }
+}
+
+#[cfg(feature = "jiff")]
+#[expect(clippy::fallible_impl_from)]
+impl From<Date> for civil::Date {
+    /// Converts a `Date` to a [`civil::Date`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use dos_date_time::{Date, jiff::civil};
+    ///
+    /// assert_eq!(civil::Date::from(Date::MIN), "1980-01-01".parse().unwrap());
+    /// assert_eq!(civil::Date::from(Date::MAX), "2107-12-31".parse().unwrap());
+    /// ```
+    fn from(date: Date) -> Self {
+        let (year, month, day) = (
+            date.year().try_into().unwrap(),
+            u8::from(date.month()).try_into().unwrap(),
+            date.day().try_into().unwrap(),
+        );
+        civil::date(year, month, day)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use time::macros::date;
 
     use super::*;
     use crate::error::DateRangeErrorKind;
-
-    #[test]
-    fn from_date_to_u16() {
-        assert_eq!(u16::from(Date::MIN), 0b0000_0000_0010_0001);
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            u16::from(Date::new(0b0010_1101_0111_1010).unwrap()),
-            0b0010_1101_0111_1010
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            u16::from(Date::new(0b0100_1101_0111_0001).unwrap()),
-            0b0100_1101_0111_0001
-        );
-        assert_eq!(u16::from(Date::MAX), 0b1111_1111_1001_1111);
-    }
-
-    #[test]
-    fn from_date_to_time_date() {
-        assert_eq!(time::Date::from(Date::MIN), date!(1980-01-01));
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            time::Date::from(Date::new(0b0010_1101_0111_1010).unwrap()),
-            date!(2002-11-26)
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            time::Date::from(Date::new(0b0100_1101_0111_0001).unwrap()),
-            date!(2018-11-17)
-        );
-        assert_eq!(time::Date::from(Date::MAX), date!(2107-12-31));
-    }
-
-    #[cfg(feature = "jiff")]
-    #[test]
-    fn from_date_to_jiff_civil_date() {
-        assert_eq!(civil::Date::from(Date::MIN), civil::date(1980, 1, 1));
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            civil::Date::from(Date::new(0b0010_1101_0111_1010).unwrap()),
-            civil::date(2002, 11, 26)
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            civil::Date::from(Date::new(0b0100_1101_0111_0001).unwrap()),
-            civil::date(2018, 11, 17)
-        );
-        assert_eq!(civil::Date::from(Date::MAX), civil::date(2107, 12, 31));
-    }
 
     #[test]
     fn try_from_time_date_to_date_before_dos_date_epoch() {
@@ -263,5 +214,54 @@ mod tests {
             Date::try_from(civil::date(2108, 1, 1)).unwrap_err(),
             DateRangeErrorKind::Overflow.into()
         );
+    }
+
+    #[test]
+    fn from_date_to_u16() {
+        assert_eq!(u16::from(Date::MIN), 0b0000_0000_0010_0001);
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            u16::from(Date::new(0b0010_1101_0111_1010).unwrap()),
+            0b0010_1101_0111_1010
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            u16::from(Date::new(0b0100_1101_0111_0001).unwrap()),
+            0b0100_1101_0111_0001
+        );
+        assert_eq!(u16::from(Date::MAX), 0b1111_1111_1001_1111);
+    }
+
+    #[test]
+    fn from_date_to_time_date() {
+        assert_eq!(time::Date::from(Date::MIN), date!(1980-01-01));
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            time::Date::from(Date::new(0b0010_1101_0111_1010).unwrap()),
+            date!(2002-11-26)
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            time::Date::from(Date::new(0b0100_1101_0111_0001).unwrap()),
+            date!(2018-11-17)
+        );
+        assert_eq!(time::Date::from(Date::MAX), date!(2107-12-31));
+    }
+
+    #[cfg(feature = "jiff")]
+    #[test]
+    fn from_date_to_jiff_civil_date() {
+        assert_eq!(civil::Date::from(Date::MIN), civil::date(1980, 1, 1));
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            civil::Date::from(Date::new(0b0010_1101_0111_1010).unwrap()),
+            civil::date(2002, 11, 26)
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            civil::Date::from(Date::new(0b0100_1101_0111_0001).unwrap()),
+            civil::date(2018, 11, 17)
+        );
+        assert_eq!(civil::Date::from(Date::MAX), civil::date(2107, 12, 31));
     }
 }
