@@ -11,56 +11,6 @@ use time::PlainDateTime;
 use super::DateTime;
 use crate::error::DateTimeRangeError;
 
-impl From<DateTime> for PlainDateTime {
-    /// Converts a `DateTime` to a [`PlainDateTime`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{
-    ///     DateTime,
-    ///     time::{PlainDateTime, macros::datetime},
-    /// };
-    ///
-    /// assert_eq!(
-    ///     PlainDateTime::from(DateTime::MIN),
-    ///     datetime!(1980-01-01 00:00:00)
-    /// );
-    /// assert_eq!(
-    ///     PlainDateTime::from(DateTime::MAX),
-    ///     datetime!(2107-12-31 23:59:58)
-    /// );
-    /// ```
-    fn from(dt: DateTime) -> Self {
-        let (date, time) = (dt.date().into(), dt.time().into());
-        Self::new(date, time)
-    }
-}
-
-#[cfg(feature = "jiff")]
-impl From<DateTime> for civil::DateTime {
-    /// Converts a `DateTime` to a [`civil::DateTime`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{DateTime, jiff::civil};
-    ///
-    /// assert_eq!(
-    ///     civil::DateTime::from(DateTime::MIN),
-    ///     "1980-01-01T00:00:00".parse().unwrap()
-    /// );
-    /// assert_eq!(
-    ///     civil::DateTime::from(DateTime::MAX),
-    ///     "2107-12-31T23:59:58".parse().unwrap()
-    /// );
-    /// ```
-    fn from(dt: DateTime) -> Self {
-        let (date, time) = (dt.date().into(), dt.time().into());
-        Self::from_parts(date, time)
-    }
-}
-
 impl TryFrom<PlainDateTime> for DateTime {
     type Error = DateTimeRangeError;
 
@@ -144,69 +94,62 @@ impl TryFrom<civil::DateTime> for DateTime {
     }
 }
 
+impl From<DateTime> for PlainDateTime {
+    /// Converts a `DateTime` to a [`PlainDateTime`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use dos_date_time::{
+    ///     DateTime,
+    ///     time::{PlainDateTime, macros::datetime},
+    /// };
+    ///
+    /// assert_eq!(
+    ///     PlainDateTime::from(DateTime::MIN),
+    ///     datetime!(1980-01-01 00:00:00)
+    /// );
+    /// assert_eq!(
+    ///     PlainDateTime::from(DateTime::MAX),
+    ///     datetime!(2107-12-31 23:59:58)
+    /// );
+    /// ```
+    fn from(dt: DateTime) -> Self {
+        let (date, time) = (dt.date().into(), dt.time().into());
+        Self::new(date, time)
+    }
+}
+
+#[cfg(feature = "jiff")]
+impl From<DateTime> for civil::DateTime {
+    /// Converts a `DateTime` to a [`civil::DateTime`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use dos_date_time::{DateTime, jiff::civil};
+    ///
+    /// assert_eq!(
+    ///     civil::DateTime::from(DateTime::MIN),
+    ///     "1980-01-01T00:00:00".parse().unwrap()
+    /// );
+    /// assert_eq!(
+    ///     civil::DateTime::from(DateTime::MAX),
+    ///     "2107-12-31T23:59:58".parse().unwrap()
+    /// );
+    /// ```
+    fn from(dt: DateTime) -> Self {
+        let (date, time) = (dt.date().into(), dt.time().into());
+        Self::from_parts(date, time)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use time::macros::datetime;
 
     use super::*;
     use crate::{Date, Time, error::DateTimeRangeErrorKind};
-
-    #[test]
-    fn from_date_time_to_plain_date_time() {
-        assert_eq!(
-            PlainDateTime::from(DateTime::MIN),
-            datetime!(1980-01-01 00:00:00)
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            PlainDateTime::from(DateTime::new(
-                Date::new(0b0010_1101_0111_1010).unwrap(),
-                Time::new(0b1001_1011_0010_0000).unwrap()
-            )),
-            datetime!(2002-11-26 19:25:00)
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            PlainDateTime::from(DateTime::new(
-                Date::new(0b0100_1101_0111_0001).unwrap(),
-                Time::new(0b0101_0100_1100_1111).unwrap()
-            )),
-            datetime!(2018-11-17 10:38:30)
-        );
-        assert_eq!(
-            PlainDateTime::from(DateTime::MAX),
-            datetime!(2107-12-31 23:59:58)
-        );
-    }
-
-    #[cfg(feature = "jiff")]
-    #[test]
-    fn from_date_time_to_jiff_civil_date_time() {
-        assert_eq!(
-            civil::DateTime::from(DateTime::MIN),
-            civil::date(1980, 1, 1).at(0, 0, 0, 0)
-        );
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            civil::DateTime::from(DateTime::new(
-                Date::new(0b0010_1101_0111_1010).unwrap(),
-                Time::new(0b1001_1011_0010_0000).unwrap()
-            )),
-            civil::date(2002, 11, 26).at(19, 25, 0, 0)
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            civil::DateTime::from(DateTime::new(
-                Date::new(0b0100_1101_0111_0001).unwrap(),
-                Time::new(0b0101_0100_1100_1111).unwrap()
-            )),
-            civil::date(2018, 11, 17).at(10, 38, 30, 0)
-        );
-        assert_eq!(
-            civil::DateTime::from(DateTime::MAX),
-            civil::date(2107, 12, 31).at(23, 59, 58, 0)
-        );
-    }
 
     #[test]
     fn try_from_plain_date_time_to_date_time_before_dos_date_time_epoch() {
@@ -320,6 +263,63 @@ mod tests {
         assert_eq!(
             DateTime::try_from(civil::date(2108, 1, 1).at(0, 0, 0, 0)).unwrap_err(),
             DateTimeRangeErrorKind::Overflow.into()
+        );
+    }
+
+    #[test]
+    fn from_date_time_to_plain_date_time() {
+        assert_eq!(
+            PlainDateTime::from(DateTime::MIN),
+            datetime!(1980-01-01 00:00:00)
+        );
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            PlainDateTime::from(DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )),
+            datetime!(2002-11-26 19:25:00)
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            PlainDateTime::from(DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )),
+            datetime!(2018-11-17 10:38:30)
+        );
+        assert_eq!(
+            PlainDateTime::from(DateTime::MAX),
+            datetime!(2107-12-31 23:59:58)
+        );
+    }
+
+    #[cfg(feature = "jiff")]
+    #[test]
+    fn from_date_time_to_jiff_civil_date_time() {
+        assert_eq!(
+            civil::DateTime::from(DateTime::MIN),
+            civil::date(1980, 1, 1).at(0, 0, 0, 0)
+        );
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            civil::DateTime::from(DateTime::new(
+                Date::new(0b0010_1101_0111_1010).unwrap(),
+                Time::new(0b1001_1011_0010_0000).unwrap()
+            )),
+            civil::date(2002, 11, 26).at(19, 25, 0, 0)
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            civil::DateTime::from(DateTime::new(
+                Date::new(0b0100_1101_0111_0001).unwrap(),
+                Time::new(0b0101_0100_1100_1111).unwrap()
+            )),
+            civil::date(2018, 11, 17).at(10, 38, 30, 0)
+        );
+        assert_eq!(
+            civil::DateTime::from(DateTime::MAX),
+            civil::date(2107, 12, 31).at(23, 59, 58, 0)
         );
     }
 }
