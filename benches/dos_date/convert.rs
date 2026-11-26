@@ -8,6 +8,19 @@ use jiff::civil;
 use test::Bencher;
 
 #[bench]
+fn try_from_time_date_to_date(b: &mut Bencher) {
+    let date = date!(1980-01-01);
+    b.iter(|| Date::try_from(date).unwrap());
+}
+
+#[cfg(feature = "jiff")]
+#[bench]
+fn try_from_jiff_civil_date_to_date(b: &mut Bencher) {
+    let date = civil::date(1980, 1, 1);
+    b.iter(|| Date::try_from(date).unwrap());
+}
+
+#[bench]
 fn from_date_to_u16(b: &mut Bencher) {
     b.iter(|| u16::from(Date::MIN));
 }
@@ -21,17 +34,4 @@ fn from_date_to_time_date(b: &mut Bencher) {
 #[bench]
 fn from_date_to_jiff_civil_date(b: &mut Bencher) {
     b.iter(|| civil::Date::from(Date::MIN));
-}
-
-#[bench]
-fn try_from_time_date_to_date(b: &mut Bencher) {
-    let date = date!(1980-01-01);
-    b.iter(|| Date::try_from(date).unwrap());
-}
-
-#[cfg(feature = "jiff")]
-#[bench]
-fn try_from_jiff_civil_date_to_date(b: &mut Bencher) {
-    let date = civil::date(1980, 1, 1);
-    b.iter(|| Date::try_from(date).unwrap());
 }
