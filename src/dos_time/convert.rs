@@ -9,53 +9,6 @@ use jiff::civil;
 
 use super::Time;
 
-impl From<Time> for u16 {
-    fn from(time: Time) -> Self {
-        time.to_raw()
-    }
-}
-
-#[expect(clippy::fallible_impl_from)]
-impl From<Time> for time::Time {
-    /// Converts a `Time` to a [`time::Time`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Time, time::macros::time};
-    ///
-    /// assert_eq!(time::Time::from(Time::MIN), time!(00:00:00));
-    /// assert_eq!(time::Time::from(Time::MAX), time!(23:59:58));
-    /// ```
-    fn from(time: Time) -> Self {
-        let (hour, minute, second) = (time.hour(), time.minute(), time.second());
-        Self::from_hms(hour, minute, second).unwrap()
-    }
-}
-
-#[cfg(feature = "jiff")]
-#[expect(clippy::fallible_impl_from)]
-impl From<Time> for civil::Time {
-    /// Converts a `Time` to a [`civil::Time`].
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use dos_date_time::{Time, jiff::civil};
-    ///
-    /// assert_eq!(civil::Time::from(Time::MIN), "00:00:00".parse().unwrap());
-    /// assert_eq!(civil::Time::from(Time::MAX), "23:59:58".parse().unwrap());
-    /// ```
-    fn from(time: Time) -> Self {
-        let (hour, minute, second) = (
-            time.hour().try_into().unwrap(),
-            time.minute().try_into().unwrap(),
-            time.second().try_into().unwrap(),
-        );
-        civil::time(hour, minute, second, i32::default())
-    }
-}
-
 impl From<time::Time> for Time {
     /// Converts a [`time::Time`] to a `Time`.
     ///
@@ -116,11 +69,95 @@ impl From<civil::Time> for Time {
     }
 }
 
+impl From<Time> for u16 {
+    fn from(time: Time) -> Self {
+        time.to_raw()
+    }
+}
+
+#[expect(clippy::fallible_impl_from)]
+impl From<Time> for time::Time {
+    /// Converts a `Time` to a [`time::Time`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use dos_date_time::{Time, time::macros::time};
+    ///
+    /// assert_eq!(time::Time::from(Time::MIN), time!(00:00:00));
+    /// assert_eq!(time::Time::from(Time::MAX), time!(23:59:58));
+    /// ```
+    fn from(time: Time) -> Self {
+        let (hour, minute, second) = (time.hour(), time.minute(), time.second());
+        Self::from_hms(hour, minute, second).unwrap()
+    }
+}
+
+#[cfg(feature = "jiff")]
+#[expect(clippy::fallible_impl_from)]
+impl From<Time> for civil::Time {
+    /// Converts a `Time` to a [`civil::Time`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use dos_date_time::{Time, jiff::civil};
+    ///
+    /// assert_eq!(civil::Time::from(Time::MIN), "00:00:00".parse().unwrap());
+    /// assert_eq!(civil::Time::from(Time::MAX), "23:59:58".parse().unwrap());
+    /// ```
+    fn from(time: Time) -> Self {
+        let (hour, minute, second) = (
+            time.hour().try_into().unwrap(),
+            time.minute().try_into().unwrap(),
+            time.second().try_into().unwrap(),
+        );
+        civil::time(hour, minute, second, i32::default())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use time::macros::time;
 
     use super::*;
+
+    #[test]
+    fn from_time_time_to_time() {
+        assert_eq!(Time::from(time::Time::MIDNIGHT), Time::MIN);
+        assert_eq!(Time::from(time!(00:00:01)), Time::MIN);
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            Time::from(time!(19:25:00)),
+            Time::new(0b1001_1011_0010_0000).unwrap()
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            Time::from(time!(10:38:30)),
+            Time::new(0b0101_0100_1100_1111).unwrap()
+        );
+        assert_eq!(Time::from(time!(23:59:58)), Time::MAX);
+        assert_eq!(Time::from(time!(23:59:59)), Time::MAX);
+    }
+
+    #[cfg(feature = "jiff")]
+    #[test]
+    fn from_jiff_civil_time_to_time() {
+        assert_eq!(Time::from(civil::Time::MIN), Time::MIN);
+        assert_eq!(Time::from(civil::time(0, 0, 1, 0)), Time::MIN);
+        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
+        assert_eq!(
+            Time::from(civil::time(19, 25, 0, 0)),
+            Time::new(0b1001_1011_0010_0000).unwrap()
+        );
+        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
+        assert_eq!(
+            Time::from(civil::time(10, 38, 30, 0)),
+            Time::new(0b0101_0100_1100_1111).unwrap()
+        );
+        assert_eq!(Time::from(civil::time(23, 59, 58, 0)), Time::MAX);
+        assert_eq!(Time::from(civil::time(23, 59, 59, 0)), Time::MAX);
+    }
 
     #[test]
     fn from_time_to_u16() {
@@ -169,42 +206,5 @@ mod tests {
             civil::time(10, 38, 30, 0)
         );
         assert_eq!(civil::Time::from(Time::MAX), civil::time(23, 59, 58, 0));
-    }
-
-    #[test]
-    fn from_time_time_to_time() {
-        assert_eq!(Time::from(time::Time::MIDNIGHT), Time::MIN);
-        assert_eq!(Time::from(time!(00:00:01)), Time::MIN);
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            Time::from(time!(19:25:00)),
-            Time::new(0b1001_1011_0010_0000).unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            Time::from(time!(10:38:30)),
-            Time::new(0b0101_0100_1100_1111).unwrap()
-        );
-        assert_eq!(Time::from(time!(23:59:58)), Time::MAX);
-        assert_eq!(Time::from(time!(23:59:59)), Time::MAX);
-    }
-
-    #[cfg(feature = "jiff")]
-    #[test]
-    fn from_jiff_civil_time_to_time() {
-        assert_eq!(Time::from(civil::Time::MIN), Time::MIN);
-        assert_eq!(Time::from(civil::time(0, 0, 1, 0)), Time::MIN);
-        // <https://devblogs.microsoft.com/oldnewthing/20030905-02/?p=42653>.
-        assert_eq!(
-            Time::from(civil::time(19, 25, 0, 0)),
-            Time::new(0b1001_1011_0010_0000).unwrap()
-        );
-        // <https://github.com/zip-rs/zip/blob/v0.6.4/src/types.rs#L553-L569>.
-        assert_eq!(
-            Time::from(civil::time(10, 38, 30, 0)),
-            Time::new(0b0101_0100_1100_1111).unwrap()
-        );
-        assert_eq!(Time::from(civil::time(23, 59, 58, 0)), Time::MAX);
-        assert_eq!(Time::from(civil::time(23, 59, 59, 0)), Time::MAX);
     }
 }
